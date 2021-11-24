@@ -1,0 +1,25 @@
+From 3cdc9b382350caf4f8bae94e02e5c802dadef700 Mon Sep 17 00:00:00 2001
+From: Tim Stahlhut <stahta01@gmail.com>
+Date: Tue, 9 Nov 2021 17:16:11 -0500
+Subject: doc: fix syntax error
+
+---
+ gcc/doc/invoke.texi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+index 709d9c4baf1..89b5662979d 100644
+--- a/gcc/doc/invoke.texi
++++ b/gcc/doc/invoke.texi
+@@ -5177,7 +5177,7 @@ thus dbg_cnt() returns true always unless the upper bound is set by this option.
+ e.g. With -fdbg-cnt=dce:10,tail_call:0
+ dbg_cnt(dce) will return true only for first 10 invocations
+ 
+-@itemx -fenable-@var{kind}-@var{pass}
++@item -fenable-@var{kind}-@var{pass}
+ @itemx -fdisable-@var{kind}-@var{pass}=@var{range-list}
+ @opindex fdisable-
+ @opindex fenable-
+-- 
+2.33.1.windows.1
+

@@ -1,0 +1,53 @@
+From ae4cfa61d637ce4c641d2cfa89c32a7f3f46eee1 Mon Sep 17 00:00:00 2001
+From: Jason Merrill <jason@redhat.com>
+Date: Wed, 15 Oct 2014 12:46:23 -0400
+Subject: Backport of SVN 216275
+
+ https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56710
+
+ PR c++/56710 (Using reserved double underscore variable name in a lambda causes internal compiler error)
+
+ 2014-10-15  Jason Merrill  <jason@redhat.com>
+
+	PR c++/56710
+	* semantics.c (finish_member_declaration): Don't push closure
+	members.
+---
+ gcc/cp/semantics.c                                | 6 ++++--
+ gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C | 9 +++++++++
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+ create mode 100644 gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C
+
+diff --git a/gcc/cp/semantics.c b/gcc/cp/semantics.c
+index e71f7d99f2f..a787fe00c53 100644
+--- a/gcc/cp/semantics.c
++++ b/gcc/cp/semantics.c
+@@ -2662,8 +2662,10 @@ finish_member_declaration (tree decl)
+ 					      /*friend_p=*/0);
+ 	}
+     }
+-  /* Enter the DECL into the scope of the class.  */
+-  else if (pushdecl_class_level (decl))
++  /* Enter the DECL into the scope of the class, if the class
++     isn't a closure (whose fields are supposed to be unnamed).  */
++  else if (CLASSTYPE_LAMBDA_EXPR (current_class_type)
++	   || pushdecl_class_level (decl))
+     {
+       if (TREE_CODE (decl) == USING_DECL)
+ 	{
+diff --git a/gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C b/gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C
+new file mode 100644
+index 00000000000..df2b03705ae
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C
+@@ -0,0 +1,9 @@
++// PR c++/56710
++// { dg-options "-std=c++11 -Wall" }
++
++int main()
++{
++    int t = 0;
++    return [&]() -> int {int __t; __t = t; return __t; }();
++    return [&t]() -> int {int __t; __t = t; return __t; }();
++}
+-- 
