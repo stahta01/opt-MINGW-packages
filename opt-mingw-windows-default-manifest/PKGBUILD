@@ -12,7 +12,7 @@ _install_prefix=$OPT_MINGW_PREFIX
 pkgbase=opt-mingw-${_realname}
 pkgname="${OPT_MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=6.4
-pkgrel=6
+pkgrel=7
 pkgdesc='Default Windows application manifest (mingw-w64)'
 url='https://cygwin.com/'
 arch=('any')
@@ -30,8 +30,10 @@ build() {
 
 #  WINDRES="$MINGW_PREFIX/bin/windres.exe --preprocessor=${_install_prefix}/bin/gcc${_gcc_suffix}.exe --preprocessor-arg=-E --preprocessor-arg=-xc-header --preprocessor-arg=-DRC_INVOKED" \
 
-  CC=${_install_prefix}/bin/gcc${_gcc_suffix}.exe \
-  CXX=${_install_prefix}/bin/g++${_gcc_suffix}.exe \
+#  CC=${_install_prefix}/bin/gcc${_gcc_suffix}.exe \
+#  CXX=${_install_prefix}/bin/g++${_gcc_suffix}.exe \
+  
+  export PATH=${OPT_MINGW_PREFIX}/bin:$PATH
   ./configure \
     --prefix=${OPT_MINGW_PREFIX}/${MINGW_CHOST} \
     --build=${MINGW_CHOST} \
