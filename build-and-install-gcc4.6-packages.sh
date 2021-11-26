@@ -21,23 +21,22 @@ _copy_data_to_repo() {
   done
 }
 
-./install-build-prerequisites.sh && \
 ./build-and-install-common-packages.sh && \
-cd mingw-w64-crt2 && \
+cd opt-mingw-crt2 && \
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo mingw-w64-i686-crt2-git mingw-w64-i686-headers2-git mingw-w64-i686-pthread-stub-headers2-git && \
+_copy_data_to_repo opt-mingw-i686-crt2-git opt-mingw-i686-headers2-git opt-mingw-i686-pthread-stub-headers2-git && \
 MINGW_ARCH="mingw64" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo mingw-w64-x86_64-crt2-git mingw-w64-x86_64-headers2-git mingw-w64-x86_64-pthread-stub-headers2-git
-cd ../mingw-w64-gcc4.6 && \
+_copy_data_to_repo opt-mingw-x86_64-crt2-git opt-mingw-x86_64-headers2-git opt-mingw-x86_64-pthread-stub-headers2-git
+cd ../opt-mingw-gcc4.6 && \
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo mingw-w64-i686-gcc4.6 mingw-w64-i686-gcc4.6-libs
+_copy_data_to_repo opt-mingw-i686-gcc4.6 opt-mingw-i686-gcc4.6-libs
 MINGW_ARCH="mingw64" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo mingw-w64-x86_64-gcc4.6 mingw-w64-x86_64-gcc4.6-libs && \
-cd ../mingw-w64-crt2 && \
+_copy_data_to_repo opt-mingw-x86_64-gcc4.6 opt-mingw-x86_64-gcc4.6-libs && \
+cd ../opt-mingw-crt2 && \
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo mingw-w64-i686-crt2-git mingw-w64-i686-headers2-git mingw-w64-i686-pthread-stub-headers2-git && \
+_copy_data_to_repo opt-mingw-i686-crt2-git opt-mingw-i686-headers2-git opt-mingw-i686-pthread-stub-headers2-git && \
 MINGW_ARCH="mingw64" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo mingw-w64-x86_64-crt2-git mingw-w64-x86_64-headers2-git mingw-w64-x86_64-pthread-stub-headers2-git
+_copy_data_to_repo opt-mingw-x86_64-crt2-git opt-mingw-x86_64-headers2-git opt-mingw-x86_64-pthread-stub-headers2-git
