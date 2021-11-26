@@ -12,13 +12,13 @@ _install_prefix=$OPT_MINGW_PREFIX
 pkgbase=opt-mingw-${_realname}
 pkgname="${OPT_MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=6.4
-pkgrel=5
+pkgrel=6
 pkgdesc='Default Windows application manifest (mingw-w64)'
 url='https://cygwin.com/'
 arch=('any')
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 license=('BSD')
-makedepends=('git' "${MINGW_PACKAGE_PREFIX}-gcc-base")
+makedepends=('git' "${OPT_MINGW_PACKAGE_PREFIX}-gcc-base")
 _GIT_TAG="release-6_4"
 source=("git+https://sourceware.org/git/cygwin-apps/${_realname}.git#tag=${_GIT_TAG}")
 sha256sums=('SKIP')
