@@ -11,7 +11,7 @@
 OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
 _install_prefix="/opt$MINGW_PREFIX"
 
-_enable_3_stages=no
+_enable_3_stages=yes
 _enable_threads=no
 _threads="win32"
 if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
@@ -40,7 +40,7 @@ pkgname=(
          $([[ "$_enable_objc" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-objc")
         )
 pkgver=${_base_pkg_version}.3
-pkgrel=1
+pkgrel=2
 pkgdesc="GCC ${_base_pkg_version} for the MinGW-w64"
 arch=('any')
 url="http://gcc.gnu.org"
