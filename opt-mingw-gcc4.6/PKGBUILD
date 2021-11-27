@@ -43,7 +43,8 @@ pkgver=${_base_pkg_version}.3
 pkgrel=2
 pkgdesc="GCC ${_base_pkg_version} for the MinGW-w64"
 arch=('any')
-url="http://gcc.gnu.org"
+mingw_arch=('mingw32' 'mingw64')
+url="https://gcc.gnu.org"
 license=('GPL' 'LGPL' 'FDL' 'custom')
 groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain" "${OPT_PACKAGE_MINGW_PREFIX}")
 makedepends=('lndir' 'make' 'patch' 'bison' 'flex' 'tar' 'diffutils'
@@ -298,14 +299,16 @@ build() {
   fi
 
   ../${_sourcedir}/configure \
+    --program-suffix=${_gcc_suffix} \
     --prefix=${_install_prefix} \
-    --with-local-prefix=${MINGW_PREFIX}/local \
+    --with-local-prefix=${_install_prefix}/local \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
     --with-native-system-header-dir=${_install_prefix}/${MINGW_CHOST}/include \
     --libexecdir=${_install_prefix}/lib \
     --with-gxx-include-dir=${_install_prefix}/include/c++/${pkgver} \
+    --enable-checking=release \
     --with-arch=${_arch} \
     --with-tune=generic \
     --enable-languages=${_languages} \
@@ -319,14 +322,13 @@ build() {
     --enable-version-specific-runtime-libs \
     --enable-lto \
     --disable-multilib \
-    --enable-checking=release \
     --disable-rpath \
     --disable-win32-registry \
     --disable-nls \
     --disable-werror \
     --disable-symvers \
     --with-libiconv=$MINGW_PREFIX \
-    --with-zlib=${MINGW_PREFIX} \
+    --with-zlib=$MINGW_PREFIX \
     --with-pkgversion="Rev${pkgrel}, Built by TimS opt-MINGW-packages project" \
     --with-bugurl="https://github.com/stahta01/opt-MINGW-packages/issues" \
     --with-gnu-as --with-gnu-ld \
