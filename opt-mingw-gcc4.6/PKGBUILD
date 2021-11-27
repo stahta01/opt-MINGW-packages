@@ -17,6 +17,7 @@ _enable_fortran=no
 _enable_objc=no
 
 _enable_3_stages=yes
+_enable_graphite=no         # yes needs fixed                   library graphite added in GCC 4.4
 _enable_threads=no
 _threads="win32"
 if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
@@ -29,6 +30,7 @@ _basename=gcc
 _base_pkg_version=4.6
 _realname=${_basename}${_base_pkg_version}
 _gcc_suffix=""
+#_gcc_suffix="-${_base_pkg_version}"
 pkgbase=opt-mingw-${_realname}
 pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs"
@@ -49,8 +51,8 @@ makedepends=('lndir' 'make' 'patch' 'bison' 'flex' 'tar' 'diffutils'
              "${MINGW_PACKAGE_PREFIX}-binutils"
              "${MINGW_PACKAGE_PREFIX}-libiconv"
              "${MINGW_PACKAGE_PREFIX}-zlib"
-#             "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
-#             $([[ "$_enable_ada" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-ada")
+             "${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-base"
+             $([[ "$_enable_ada" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-ada")
              "${OPT_PACKAGE_MINGW_PREFIX}-crt"
              "${OPT_PACKAGE_MINGW_PREFIX}-headers"
              "${OPT_PACKAGE_MINGW_PREFIX}-windows-default-manifest")
@@ -63,9 +65,15 @@ options=('strip' '!debug' 'staticlibs' '!emptydirs' '!buildflags')
 GMP_VERSION=4.3.2
 MPFR_VERSION=2.4.2
 MPC_VERSION=0.8.1
-noextract=("${_basename}-${pkgver}.tar.bz2" "mpfr-${MPFR_VERSION}.tar.bz2" "gmp-${GMP_VERSION}.tar.bz2" "mpc-${MPC_VERSION}.tar.gz")
+#ISL_VERSION=0.15
+#CLOOG_VERSION=0.18.1
 _sourcedir=${_basename}-${pkgver}
-source=("ftp://gcc.gnu.org/pub/gcc/releases/${_basename}-${pkgver}/${_basename}-${pkgver}.tar.bz2"
+noextract=("${_sourcedir}.tar.bz2"
+           "mpfr-$MPFR_VERSION.tar.bz2"
+           "gmp-$GMP_VERSION.tar.bz2"
+           "mpc-$MPC_VERSION.tar.gz"
+           "isl-$ISL_VERSION.tar.bz2")
+source=("https://ftp.gnu.org/gnu/gcc/${_basename}-${pkgver}/${_sourcedir}.tar.bz2"
         "ftp://gcc.gnu.org/pub/gcc/infrastructure/mpfr-${MPFR_VERSION}.tar.bz2"
         "ftp://gcc.gnu.org/pub/gcc/infrastructure/gmp-${GMP_VERSION}.tar.bz2"
         "ftp://gcc.gnu.org/pub/gcc/infrastructure/mpc-${MPC_VERSION}.tar.gz"
@@ -147,6 +155,12 @@ prepare() {
   _extract_to_gcc_folder          mpfr-${MPFR_VERSION}.tar.bz2
   _extract_to_gcc_folder          gmp-${GMP_VERSION}.tar.bz2
   _extract_to_gcc_folder          mpc-${MPC_VERSION}.tar.gz
+
+  if [[ "$_enable_graphite" == "yes" ]]; then
+    _extract_to_gcc_folder       isl-${ISL_VERSION}.tar.bz2
+  else
+    rm -fr ${srcdir}/${_sourcedir}/isl
+  fi
 
   cd ${srcdir}/${_sourcedir}
 
@@ -252,10 +266,24 @@ build() {
     ;;
   esac
 
-  if [ "$_enable_3_stages" == "yes" ]; then
-    configure_opts+=("--enable-bootstrap")
-  elif [ "$_enable_3_stages" == "no" ]; then
+  if check_option "debug" "n"; then
+    configure_opts+=("--disable-libstdcxx-debug")
+  else
+    configure_opts+=("--enable-libstdcxx-debug")
+  fi
+
+  if [ "$_enable_3_stages" == "no" ]; then
     configure_opts+=("--disable-bootstrap")
+  elif [ "$_enable_3_stages" == "yes" ]; then
+    configure_opts+=("--enable-bootstrap")
+  fi
+
+  if [ "$_enable_graphite" == "yes" ]; then
+    configure_opts+=("--enable-graphite")
+  else
+    configure_opts+=("--disable-graphite")
+    configure_opts+=("--without-cloog")
+    configure_opts+=("--without-isl")
   fi
 
   if [ "$_enable_threads" == "yes" ]; then
@@ -312,11 +340,9 @@ build() {
     --enable-languages=${_languages} \
     --enable-shared --enable-static \
     --enable-libatomic \
-    --enable-graphite \
     --enable-fully-dynamic-string \
     --enable-libstdcxx-time=yes \
     --disable-libstdcxx-pch \
-    --disable-libstdcxx-debug \
     --enable-version-specific-runtime-libs \
     --enable-lto \
     --disable-multilib \
