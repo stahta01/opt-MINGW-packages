@@ -29,9 +29,8 @@ _basename=gcc
 _base_pkg_version=4.6
 _realname=${_basename}${_base_pkg_version}
 _gcc_suffix=""
-pkgbase=opt-mingw-${_basename}${_base_pkg_version}
-pkgname=(
-         "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
+pkgbase=opt-mingw-${_realname}
+pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs"
          $([[ "$_enable_fortran" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libgfortran")
          $([[ "$_enable_fortran" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-fortran")
