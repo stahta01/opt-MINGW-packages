@@ -46,7 +46,7 @@ arch=('any')
 mingw_arch=('mingw32' 'mingw64')
 url="https://gcc.gnu.org"
 license=('GPL' 'LGPL' 'FDL' 'custom')
-groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain" "${OPT_PACKAGE_MINGW_PREFIX}")
+groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain")
 makedepends=('lndir' 'make' 'patch' 'bison' 'flex' 'tar' 'diffutils'
              "${MINGW_PACKAGE_PREFIX}-binutils"
              "${MINGW_PACKAGE_PREFIX}-libiconv"
@@ -61,8 +61,6 @@ if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
 fi
 checkdepends=('dejagnu')
 optdepends=()
-replaces=()
-backup=()
 options=('strip' '!debug' 'staticlibs' '!emptydirs' '!buildflags')
 MPFR_VERSION=mpfr-2.4.2
 GMP_VERSION=gmp-4.3.2
@@ -345,6 +343,8 @@ build() {
   #fi
 
   make -j1 all
+
+  rm -rf ${srcdir}${_install_prefix}
 
   make -j1 DESTDIR=${srcdir} install
   if [ "$_enable_ada" == "yes" ]; then
