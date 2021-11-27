@@ -131,13 +131,15 @@ _extract() {
     fi
 }
 
-_extract_to_source_folder() {
+_extract_to_gcc_folder() {
     local tarfile="$1"
     local subfolder="$(echo "$tarfile" | sed 's/-.*$//')"
-    if [ ! -d  "${_sourcedir}/$subfolder" ]; then
-        echo "Extracting ${tarfile} to ${_sourcedir}/$subfolder"
-        mkdir -p "${_sourcedir}/$subfolder"
-        tar -x --strip-components=1 -f "$tarfile" -C "${_sourcedir}/$subfolder"
+    if [ ! -d  "$_sourcedir/$subfolder" ]; then
+        echo "Extracting ${tarfile} to $_sourcedir/$subfolder"
+        mkdir -p "$_sourcedir/$subfolder"
+        tar -x --strip-components=1 -f "$tarfile" -C "$_sourcedir/$subfolder"
+    else
+        echo "Folder $_sourcedir/$subfolder already exists"
     fi
 }
 # =========================================== #
@@ -146,9 +148,9 @@ prepare() {
   cd ${srcdir}
 
   _extract                        ${_basename}-${pkgver}.tar.bz2
-  _extract_to_source_folder       $MPFR_VERSION.tar.bz2
-  _extract_to_source_folder       $GMP_VERSION.tar.bz2
-  _extract_to_source_folder       $MPC_VERSION.tar.gz
+  _extract_to_gcc_folder          $MPFR_VERSION.tar.bz2
+  _extract_to_gcc_folder          $GMP_VERSION.tar.bz2
+  _extract_to_gcc_folder          $MPC_VERSION.tar.gz
 
   cd ${srcdir}/${_sourcedir}
 
