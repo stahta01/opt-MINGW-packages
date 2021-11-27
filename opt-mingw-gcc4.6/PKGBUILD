@@ -11,6 +11,11 @@
 OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
 _install_prefix="/opt$MINGW_PREFIX"
 
+_enable_ada=no
+_enable_cxx=yes
+_enable_fortran=no
+_enable_objc=no
+
 _enable_3_stages=yes
 _enable_threads=no
 _threads="win32"
@@ -19,11 +24,6 @@ if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
 else
   _enable_libgomp=no
 fi
-
-_enable_ada=no
-_enable_cxx=yes
-_enable_fortran=no
-_enable_objc=no
 
 _basename=gcc
 _gccnumber=4.6
