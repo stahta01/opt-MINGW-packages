@@ -376,7 +376,7 @@ package_opt-mingw-gcc() {
     "${MINGW_PACKAGE_PREFIX}-zlib"
     "${OPT_PACKAGE_MINGW_PREFIX}-crt"
     "${OPT_PACKAGE_MINGW_PREFIX}-headers"
-#    "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs=${pkgver}"
+    "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs=${pkgver}-${pkgrel}"
   )
   if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
     depends+=("${OPT_PACKAGE_MINGW_PREFIX}-winpthreads")
