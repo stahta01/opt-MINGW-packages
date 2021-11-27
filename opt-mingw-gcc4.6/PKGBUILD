@@ -26,10 +26,9 @@ else
 fi
 
 _basename=gcc
-_gccnumber=4.6
-_gcc_suffix=""
 _base_pkg_version=4.6
-_realname=${_basename}${_gccnumber}
+_realname=${_basename}${_base_pkg_version}
+_gcc_suffix=""
 pkgbase=opt-mingw-${_basename}${_base_pkg_version}
 pkgname=(
          "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
@@ -62,15 +61,15 @@ fi
 checkdepends=('dejagnu')
 optdepends=()
 options=('strip' '!debug' 'staticlibs' '!emptydirs' '!buildflags')
-MPFR_VERSION=mpfr-2.4.2
-GMP_VERSION=gmp-4.3.2
-MPC_VERSION=mpc-0.8.1
-noextract=("${_basename}-${pkgver}.tar.bz2" "${MPFR_VERSION}.tar.bz2" "${GMP_VERSION}.tar.bz2" "${MPC_VERSION}.tar.gz")
+GMP_VERSION=4.3.2
+MPFR_VERSION=2.4.2
+MPC_VERSION=0.8.1
+noextract=("${_basename}-${pkgver}.tar.bz2" "mpfr-${MPFR_VERSION}.tar.bz2" "gmp-${GMP_VERSION}.tar.bz2" "mpc-${MPC_VERSION}.tar.gz")
 _sourcedir=${_basename}-${pkgver}
 source=("ftp://gcc.gnu.org/pub/gcc/releases/${_basename}-${pkgver}/${_basename}-${pkgver}.tar.bz2"
-        "ftp://gcc.gnu.org/pub/gcc/infrastructure/${MPFR_VERSION}.tar.bz2"
-        "ftp://gcc.gnu.org/pub/gcc/infrastructure/${GMP_VERSION}.tar.bz2"
-        "ftp://gcc.gnu.org/pub/gcc/infrastructure/${MPC_VERSION}.tar.gz"
+        "ftp://gcc.gnu.org/pub/gcc/infrastructure/mpfr-${MPFR_VERSION}.tar.bz2"
+        "ftp://gcc.gnu.org/pub/gcc/infrastructure/gmp-${GMP_VERSION}.tar.bz2"
+        "ftp://gcc.gnu.org/pub/gcc/infrastructure/mpc-${MPC_VERSION}.tar.gz"
         130-gcc-4.3-dont-escape-arguments-that-dont-need-it-in-pex-win32.c.patch
         140-gcc-4.0-fix-for-windows-not-minding-non-existant-parent-dirs.patch
         150-gcc-4.0-windows-lrealpath-no-force-lowercase-nor-backslash.patch
@@ -146,9 +145,9 @@ prepare() {
   cd ${srcdir}
 
   _extract                        ${_basename}-${pkgver}.tar.bz2
-  _extract_to_gcc_folder          $MPFR_VERSION.tar.bz2
-  _extract_to_gcc_folder          $GMP_VERSION.tar.bz2
-  _extract_to_gcc_folder          $MPC_VERSION.tar.gz
+  _extract_to_gcc_folder          mpfr-${MPFR_VERSION}.tar.bz2
+  _extract_to_gcc_folder          gmp-${GMP_VERSION}.tar.bz2
+  _extract_to_gcc_folder          mpc-${MPC_VERSION}.tar.gz
 
   cd ${srcdir}/${_sourcedir}
 
