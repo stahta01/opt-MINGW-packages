@@ -10,7 +10,7 @@ pkgbase=mingw-w64-${_realname}3
 pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}3-git" "${OPT_PACKAGE_MINGW_PREFIX}-headers3-git" "${OPT_PACKAGE_MINGW_PREFIX}-pthread-stub-headers3-git")
 replaces=()
 pkgver=3.4.0.3935.8c7e00886
-pkgrel=2
+pkgrel=3
 _commit='8c7e00886f69c448270376601fe1c016392e26f9'
 pkgdesc='MinGW-w64 CRT for Windows'
 arch=('any')
@@ -87,7 +87,7 @@ build() {
     --with-sysroot=${_install_prefix}/${MINGW_CHOST} \
     --enable-wildcard \
     ${_crt_configure_args}
-  make
+  make -j1
 }
 
 package_crt() {
