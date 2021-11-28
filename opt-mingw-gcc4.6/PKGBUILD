@@ -13,10 +13,10 @@ _install_prefix="/opt$MINGW_PREFIX"
 
 _enable_ada=no
 _enable_cxx=yes
-_enable_fortran=no
-_enable_objc=no
+_enable_fortran=yes
+_enable_objc=yes
 
-_enable_3_stages=yes
+_enable_3_stages=no
 _enable_graphite=no         # yes needs fixed                   library graphite added in GCC 4.4
 _enable_threads=no
 _threads="win32"
@@ -40,7 +40,7 @@ pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          $([[ "$_enable_objc" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-objc")
         )
 pkgver=${_base_pkg_version}.3
-pkgrel=2
+pkgrel=3
 pkgdesc="GCC ${_base_pkg_version} for the MinGW-w64"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64')
