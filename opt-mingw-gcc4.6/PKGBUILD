@@ -240,7 +240,8 @@ build() {
 
   case "${CARCH}" in
     i686)
-      configure_opts+=("--disable-sjlj-exceptions --with-dwarf2")
+      configure_opts+=("--enable-sjlj-exceptions")
+      configure_opts+=("--without-dwarf2")
       LDFLAGS+=" -Wl,--large-address-aware"
 #      local _local_gcc32_prefix=/c/GreenApps32/gcc_4.6.0-mingw32_x86_generic/mingw
 #      export PATH="${_local_gcc32_prefix}/bin":$PATH
