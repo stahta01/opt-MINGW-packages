@@ -25,6 +25,8 @@ _copy_data_to_repo() {
 cd opt-mingw-gcc4.6 && \
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-i686-gcc4.6 opt-mingw-i686-gcc4.6-libs
+_copy_data_to_repo opt-mingw-i686-gcc4.6 opt-mingw-i686-gcc4.6-libs \
+  opt-mingw-i686-gcc4.6-fortran opt-mingw-i686-gcc4.6-libgfortran opt-mingw-i686-gcc4.6-objc && \
 MINGW_ARCH="mingw64" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-x86_64-gcc4.6 opt-mingw-x86_64-gcc4.6-libs
+_copy_data_to_repo opt-mingw-x86_64-gcc4.6 opt-mingw-x86_64-gcc4.6-libs \
+  opt-mingw-x86_64-gcc4.6-fortran opt-mingw-x86_64-gcc4.6-libgfortran opt-mingw-x86_64-gcc4.6-objc
