@@ -21,23 +21,10 @@ _copy_data_to_repo() {
   done
 }
 
-./build-and-install-common-packages.sh && \
-cd opt-mingw-crt3 && \
-export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
-MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-i686-crt3-git opt-mingw-i686-headers3-git opt-mingw-i686-pthread-stub-headers3-git && \
-MINGW_ARCH="mingw64" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-x86_64-crt3-git opt-mingw-x86_64-headers3-git opt-mingw-x86_64-pthread-stub-headers3-git
-cd ../opt-mingw-gcc4.6 && \
+./build-and-install-crt3-packages.sh && \
+cd opt-mingw-gcc4.6 && \
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
 _copy_data_to_repo opt-mingw-i686-gcc4.6 opt-mingw-i686-gcc4.6-libs
 MINGW_ARCH="mingw64" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-x86_64-gcc4.6 opt-mingw-x86_64-gcc4.6-libs && \
-cd ../opt-mingw-crt3 && \
-export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
-MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-i686-crt3-git opt-mingw-i686-headers3-git opt-mingw-i686-pthread-stub-headers3-git && \
-MINGW_ARCH="mingw64" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-x86_64-crt3-git opt-mingw-x86_64-headers3-git opt-mingw-x86_64-pthread-stub-headers3-git && \
-cd .. && ./build-and-install-common-packages.sh
+_copy_data_to_repo opt-mingw-x86_64-gcc4.6 opt-mingw-x86_64-gcc4.6-libs
