@@ -16,7 +16,7 @@ _enable_cxx=yes
 _enable_fortran=yes
 _enable_objc=yes
 
-_enable_3_stages=no
+_enable_3_stages=yes
 _enable_graphite=no         # yes needs fixed                   library graphite added in GCC 4.4
 _enable_threads=no
 _threads="win32"
@@ -40,7 +40,7 @@ pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          $([[ "$_enable_objc" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-objc")
         )
 pkgver=${_base_pkg_version}.3
-pkgrel=3
+pkgrel=4
 pkgdesc="GCC ${_base_pkg_version} for the MinGW-w64"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64')
@@ -222,17 +222,7 @@ prepare() {
   apply_patch_with_msg 804-gcc-4.6.4-Fix-texi-docs-syntax-errors.patch
 }
 
-_package_common() {
-  # Use without "with-gcc-major-version-only" configuration option
-  _gcc_driver_version=`eval "cat ${srcdir}/${_sourcedir}/gcc/BASE-VER"`
-
-  echo "_gcc_driver_version := ${_gcc_driver_version}"
-  echo "_install_prefix := ${_install_prefix}"
-}
-
 build() {
-  _package_common
-
   [[ -d ${srcdir}/build-${MINGW_CHOST} ]] && rm -rf ${srcdir}/build-${MINGW_CHOST}
   mkdir -p ${srcdir}/build-${MINGW_CHOST} && cd ${srcdir}/build-${MINGW_CHOST}
 
@@ -589,62 +579,50 @@ package_opt-mingw-gcc-objc() {
 
 # 32-bit wrappers
 package_opt-mingw-i686-gcc4.6-libs() {
-  _package_common
   package_opt-mingw-gcc-libs
 }
 
 package_opt-mingw-i686-gcc4.6() {
-  _package_common
   package_opt-mingw-gcc
 }
 
 package_opt-mingw-i686-gcc4.6-libgfortran() {
-  _package_common
   package_opt-mingw-gcc-libgfortran
 }
 
 package_opt-mingw-i686-gcc4.6-fortran() {
-  _package_common
   package_opt-mingw-gcc-fortran
 }
 
 package_opt-mingw-i686-gcc4.6-ada() {
-  _package_common
   package_opt-mingw-gcc-ada
 }
 
 package_opt-mingw-i686-gcc4.6-objc() {
-  _package_common
   package_opt-mingw-gcc-objc
 }
 
 # 64-bit wrappers
 package_opt-mingw-x86_64-gcc4.6-libs() {
-  _package_common
   package_opt-mingw-gcc-libs
 }
 
 package_opt-mingw-x86_64-gcc4.6() {
-  _package_common
   package_opt-mingw-gcc
 }
 
 package_opt-mingw-x86_64-gcc4.6-libgfortran() {
-  _package_common
   package_opt-mingw-gcc-libgfortran
 }
 
 package_opt-mingw-x86_64-gcc4.6-fortran() {
-  _package_common
   package_opt-mingw-gcc-fortran
 }
 
 package_opt-mingw-x86_64-gcc4.6-ada() {
-  _package_common
   package_opt-mingw-gcc-ada
 }
 
 package_opt-mingw-x86_64-gcc4.6-objc() {
-  _package_common
   package_opt-mingw-gcc-objc
 }
