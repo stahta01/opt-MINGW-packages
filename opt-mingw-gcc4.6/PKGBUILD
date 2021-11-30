@@ -25,6 +25,7 @@ if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
 else
   _enable_libgomp=no
 fi
+_enable_libquadmath=no
 
 _basename=gcc
 _base_pkg_version=4.6
@@ -40,7 +41,7 @@ pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          $([[ "$_enable_objc" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-objc")
         )
 pkgver=${_base_pkg_version}.3
-pkgrel=5
+pkgrel=6
 pkgdesc="GCC ${_base_pkg_version} for the MinGW-w64"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64')
@@ -286,6 +287,12 @@ build() {
     configure_opts+=("--enable-libgomp")
   elif [ "$_enable_libgomp" == "no" ]; then
     configure_opts+=("--disable-libgomp")
+  fi
+
+  if [ "$_enable_libquadmath" == "yes" ]; then
+    configure_opts+=("--enable-libquadmath")
+  elif [ "$_enable_libquadmath" == "no" ]; then
+    configure_opts+=("--disable-libquadmath")
   fi
 
   local _languages="c,lto"
