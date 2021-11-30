@@ -388,12 +388,15 @@ package_opt-mingw-gcc-libs() {
   mkdir -p ${pkgdir}${_install_prefix}/bin
 
   cd ${srcdir}${_install_prefix}
-  cp bin/{libgcc*,libquadmath*,libssp*}.dll ${pkgdir}${_install_prefix}/bin/
+  cp bin/{libgcc*,libssp*}.dll ${pkgdir}${_install_prefix}/bin/
   if [ "$_enable_cxx" == "yes" ]; then
     cp bin/libstdc*.dll ${pkgdir}${_install_prefix}/bin/
   fi
   if [ "$_enable_libgomp" == "yes" ]; then
     cp bin/libgomp*.dll ${pkgdir}${_install_prefix}/bin/
+  fi
+  if [ "$_enable_libquadmath" != "no" ]; then
+    cp bin/libquadmath*.dll ${pkgdir}${_install_prefix}/bin/
   fi
 }
 
@@ -449,7 +452,9 @@ package_opt-mingw-gcc() {
   if [ "$_enable_libgomp" == "yes" ]; then
     cp lib/gcc/${MINGW_CHOST}/${pkgver}/libgomp.*           ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
   fi
-  cp lib/gcc/${MINGW_CHOST}/${pkgver}/libquadmath.*         ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
+  if [ "$_enable_libquadmath" != "no" ]; then
+    cp lib/gcc/${MINGW_CHOST}/${pkgver}/libquadmath.*       ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
+  fi
   cp lib/gcc/${MINGW_CHOST}/${pkgver}/libssp*               ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
   cp lib/gcc/${MINGW_CHOST}/${pkgver}/lto*.exe              ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
 
@@ -480,7 +485,9 @@ package_opt-mingw-gcc() {
   if [ "$_enable_libgomp" == "yes" ]; then
     cp share/info/libgomp.info*                             ${pkgdir}${_install_prefix}/share/info/
   fi
-  cp share/info/libquadmath.info*                           ${pkgdir}${_install_prefix}/share/info/
+  if [ "$_enable_libquadmath" != "no" ]; then
+    cp share/info/libquadmath.info*                         ${pkgdir}${_install_prefix}/share/info/
+  fi
 
   #cp share/locale/* ${pkgdir}${_install_prefix}/share/locale/
   mkdir -p ${pkgdir}${_install_prefix}/share/man/man1
