@@ -21,7 +21,6 @@ _copy_data_to_repo() {
   done
 }
 
-./build-and-install-crt3-packages.sh && \
 cd opt-mingw-gcc4.6 && \
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
