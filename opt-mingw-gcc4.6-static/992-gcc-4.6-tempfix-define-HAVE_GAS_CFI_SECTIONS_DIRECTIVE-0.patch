@@ -1,0 +1,27 @@
+From ae1d29601f9d52cc106c6a68d424661f5137511f Mon Sep 17 00:00:00 2001
+From: Tim Stahlhut <stahta01@gmail.com>
+Date: Sat, 4 Dec 2021 17:48:06 -0500
+Subject: #define HAVE_GAS_CFI_SECTIONS_DIRECTIVE 0
+
+This define may need to be zero to build with an older binutils;
+binutils version 2.19.1 is my current goal.
+
+---
+ gcc/configure | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/gcc/configure b/gcc/configure
+index c8caff252f4..11dc1cc8603 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -22143,8 +22143,7 @@ $as_echo "$gcc_cv_as_cfi_sections_directive" >&6; }
+ 
+ 
+ cat >>confdefs.h <<_ACEOF
+-#define HAVE_GAS_CFI_SECTIONS_DIRECTIVE `if test $gcc_cv_as_cfi_sections_directive = yes;
+-    then echo 1; else echo 0; fi`
++#define HAVE_GAS_CFI_SECTIONS_DIRECTIVE 0
+ _ACEOF
+ 
+ 
+-- 

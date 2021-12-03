@@ -1,0 +1,24 @@
+From c3eb688a763d8db1f509fb98fee0d27420d8ecb4 Mon Sep 17 00:00:00 2001
+From: Tim Stahlhut <stahta01@gmail.com>
+Date: Thu, 2 Dec 2021 22:05:18 -0500
+Subject: tempfix: Comment out stack increase
+
+---
+ config/mh-mingw | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/config/mh-mingw b/config/mh-mingw
+index bc1d27477d0..5f250beeb31 100644
+--- a/config/mh-mingw
++++ b/config/mh-mingw
+@@ -4,5 +4,5 @@ BOOT_CFLAGS += -D__USE_MINGW_ACCESS -Wno-pedantic-ms-format
+ CFLAGS += -D__USE_MINGW_ACCESS
+ # Increase stack limit to a figure based on the Linux default, with 4MB added
+ # as GCC turns out to need that much more to pass all the limits-* tests.
+-LDFLAGS += -Wl,--stack,12582912
+-BOOT_LDFLAGS += -Wl,--stack,12582912
++#LDFLAGS += -Wl,--stack,12582912
++#BOOT_LDFLAGS += -Wl,--stack,12582912
+-- 
+2.34.1.windows.1
+
