@@ -18,7 +18,7 @@ url='https://mingw-w64.sourceforge.io/'
 license=('custom')
 groups=("${OPT_MINGW_PACKAGE_PREFIX}-toolchain")
 makedepends=('git'
-             "${OPT_MINGW_PACKAGE_PREFIX}-gcc-base"
+             "${MINGW_PACKAGE_PREFIX}-gcc-base"
              "${MINGW_PACKAGE_PREFIX}-binutils")
 options=('!strip' 'staticlibs' '!buildflags' '!emptydirs')
 source=("${_sourcedir}"::"git+https://git.code.sf.net/p/mingw-w64/mingw-w64#commit=$_commit")
