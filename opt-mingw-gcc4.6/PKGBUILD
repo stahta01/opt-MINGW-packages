@@ -42,7 +42,7 @@ pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
         )
 pkgver=${_base_pkg_version}.4
 pkgrel=2
-pkgdesc="GCC ${_base_pkg_version} for the MinGW-w64"
+pkgdesc="GCC ${_base_pkg_version} for (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64')
 url="https://gcc.gnu.org"
@@ -377,7 +377,7 @@ build() {
 }
 
 package_opt-mingw-gcc-libs() {
-  pkgdesc="GNU Compiler Collection (libraries) for MinGW-w64"
+  pkgdesc="GNU Compiler Collection (libraries) for (mingw-w64)"
   depends=()
   if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
     depends+=("${OPT_PACKAGE_MINGW_PREFIX}-libwinpthread")
@@ -401,7 +401,7 @@ package_opt-mingw-gcc-libs() {
 }
 
 package_opt-mingw-gcc() {
-  pkgdesc="GNU Compiler Collection (C,C++,OpenMP) for MinGW-w64"
+  pkgdesc="GNU Compiler Collection (C,C++,OpenMP) for (mingw-w64)"
   depends=(
     "${OPT_PACKAGE_MINGW_PREFIX}-binutils"
     "${OPT_PACKAGE_MINGW_PREFIX}-zlib"
@@ -503,7 +503,7 @@ package_opt-mingw-gcc() {
 }
 
 package_opt-mingw-gcc-libgfortran() {
-  pkgdesc="GNU Compiler Collection (libgfortran) for MinGW-w64"
+  pkgdesc="GNU Compiler Collection (libgfortran) for (mingw-w64)"
   depends=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs=${pkgver}-${pkgrel}")
   provides=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-libgfortran")
   conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-libgfortran")
@@ -514,7 +514,7 @@ package_opt-mingw-gcc-libgfortran() {
 }
 
 package_opt-mingw-gcc-fortran() {
-  pkgdesc="GNU Compiler Collection (Fortran) for MinGW-w64"
+  pkgdesc="GNU Compiler Collection (Fortran) for (mingw-w64)"
   depends=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}=${pkgver}-${pkgrel}"
            "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libgfortran=${pkgver}-${pkgrel}")
   provides=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-fortran")
@@ -540,7 +540,7 @@ package_opt-mingw-gcc-fortran() {
 }
 
 package_opt-mingw-gcc-ada() {
-  pkgdesc="GNU Compiler Collection (Ada) for MinGW-w64"
+  pkgdesc="GNU Compiler Collection (Ada) for (mingw-w64)"
   depends=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}=${pkgver}-${pkgrel}")
 
   mkdir -p ${pkgdir}${_install_prefix}/{bin,lib,share}
@@ -574,7 +574,7 @@ package_opt-mingw-gcc-ada() {
 }
 
 package_opt-mingw-gcc-objc() {
-  pkgdesc="GNU Compiler Collection (ObjC,Obj-C++) for MinGW-w64"
+  pkgdesc="GNU Compiler Collection (ObjC,Obj-C++) for (mingw-w64)"
   depends=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}=${pkgver}-${pkgrel}")
 
   mkdir -p ${pkgdir}${_install_prefix}/{bin,lib}
