@@ -10,9 +10,9 @@ pkgbase=mingw-w64-${_realname}3
 pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}3-git" "${OPT_PACKAGE_MINGW_PREFIX}-headers3-git" "${OPT_PACKAGE_MINGW_PREFIX}-pthread-stub-headers3-git")
 replaces=()
 pkgver=3.4.0.3935.8c7e00886
-pkgrel=4
+pkgrel=5
 _commit='8c7e00886f69c448270376601fe1c016392e26f9'
-pkgdesc='MinGW-w64 CRT for Windows'
+pkgdesc='CRT for Windows (mingw-w64)'
 arch=('any')
 url='https://mingw-w64.sourceforge.io/'
 license=('custom')
@@ -91,7 +91,8 @@ build() {
 }
 
 package_crt() {
-  pkgdesc='MinGW-w64 CRT for Windows'
+  pkgdesc='CRT for Windows (mingw-w64)'
+  depends=("${OPT_MINGW_PACKAGE_PREFIX}-headers${_crtnumber}-git=${pkgver}-${pkgrel}")
   provides=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
   conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
 
@@ -101,7 +102,8 @@ package_crt() {
 }
 
 package_pthread_stub_headers() {
-    pkgdesc="MinGW-w64 pthread stub headers for Windows"
+    pkgdesc="pthread stub headers for Windows (mingw-w64)"
+    depends=("${OPT_MINGW_PACKAGE_PREFIX}-headers${_crtnumber}-git=${pkgver}-${pkgrel}")
     provides=("${OPT_PACKAGE_MINGW_PREFIX}-pthread-stub-headers")
     conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-pthread-stub-headers" "${OPT_PACKAGE_MINGW_PREFIX}-winpthreads")
     msg "Copying ${MINGW_CHOST} pthread stub headers"
@@ -114,7 +116,7 @@ package_pthread_stub_headers() {
 }
 
 package_headers() {
-  pkgdesc="MinGW-w64 headers for Windows"
+  pkgdesc="headers for Windows (mingw-w64)"
   provides=("${OPT_PACKAGE_MINGW_PREFIX}-headers")
   conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-headers")
 
