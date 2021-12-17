@@ -352,7 +352,7 @@ build() {
     --disable-werror \
     --disable-symvers \
     --with-libiconv=$MINGW_PREFIX \
-    --with-zlib=$MINGW_PREFIX \
+    --with-zlib=${_install_prefix} \
     --with-pkgversion="Rev${pkgrel}, Built by TimS opt-MINGW-packages project" \
     --with-bugurl="https://github.com/stahta01/opt-MINGW-packages/issues" \
     --with-gnu-as --with-gnu-ld \
