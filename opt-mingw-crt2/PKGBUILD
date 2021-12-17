@@ -6,11 +6,12 @@ OPT_MINGW_PREFIX="/opt$MINGW_PREFIX"
 
 _realname=crt
 _sourcedir=mingw-w64-git
+_crtnumber=2
 pkgbase=mingw-w64-${_realname}2
 pkgname=("${OPT_MINGW_PACKAGE_PREFIX}-${_realname}2-git" "${OPT_MINGW_PACKAGE_PREFIX}-headers2-git" "${OPT_MINGW_PACKAGE_PREFIX}-pthread-stub-headers2-git")
 replaces=()
 pkgver=2.0.0.2777.24b1f9cdc
-pkgrel=2
+pkgrel=3
 _commit='24b1f9cdcf1d425700312373b14e2a6e58c6d0aa'
 pkgdesc='MinGW-w64 CRT for Windows'
 arch=('any')
@@ -95,6 +96,7 @@ build() {
 
 package_crt() {
   pkgdesc='MinGW-w64 CRT for Windows'
+  depends=("${OPT_MINGW_PACKAGE_PREFIX}-headers${_crtnumber}-git=${pkgver}-${pkgrel}")
   provides=("${OPT_MINGW_PACKAGE_PREFIX}-${_realname}")
   conflicts=("${OPT_MINGW_PACKAGE_PREFIX}-${_realname}")
 
@@ -105,6 +107,7 @@ package_crt() {
 
 package_pthread_stub_headers() {
     pkgdesc="MinGW-w64 pthread stub headers for Windows"
+    depends=("${OPT_MINGW_PACKAGE_PREFIX}-headers${_crtnumber}-git=${pkgver}-${pkgrel}")
     provides=("${OPT_MINGW_PACKAGE_PREFIX}-pthread-stub-headers")
     conflicts=("${OPT_MINGW_PACKAGE_PREFIX}-pthread-stub-headers" "${OPT_MINGW_PACKAGE_PREFIX}-winpthreads")
     msg "Copying ${MINGW_CHOST} pthread stub headers"
