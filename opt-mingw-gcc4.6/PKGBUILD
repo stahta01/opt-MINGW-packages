@@ -12,7 +12,7 @@ OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
 _install_prefix="/opt$MINGW_PREFIX"
 
 _enable_ada=no
-_enable_cxx=yes
+_enable_cxx=no
 _enable_fortran=no
 _enable_objc=no
 
