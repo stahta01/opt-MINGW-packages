@@ -1,0 +1,33 @@
+From 63c9b8aa91dcfbc5bdb424e37839a4f0279de3d6 Mon Sep 17 00:00:00 2001
+From: Tim Stahlhut <stahta01@gmail.com>
+Date: Fri, 10 Dec 2021 17:08:50 -0500
+Subject: Use do_pseudo_reloc (void * start, void * end, void * base) { return;
+ }
+
+---
+ mingw-w64-crt/crt/pseudo-reloc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/mingw-w64-crt/crt/pseudo-reloc.c b/mingw-w64-crt/crt/pseudo-reloc.c
+index fea6289ef..38890ebb3 100644
+--- a/mingw-w64-crt/crt/pseudo-reloc.c
++++ b/mingw-w64-crt/crt/pseudo-reloc.c
+@@ -302,7 +302,8 @@ __write_memory (void *addr, const void *src, size_t len)
+ #define RP_VERSION_V2 1
+ 
+ static void
+-do_pseudo_reloc (void * start, void * end, void * base)
++do_pseudo_reloc (void * start, void * end, void * base) { return; }
++#if 0
+ {
+   ptrdiff_t addr_imp, reldata;
+   ptrdiff_t reloc_target = (ptrdiff_t) ((char *)end - (char*)start);
+@@ -457,6 +458,7 @@ do_pseudo_reloc (void * start, void * end, void * base)
+ 	}
+      }
+ }
++#endif
+ 
+ void
+ _pei386_runtime_relocator (void)
+-- 
