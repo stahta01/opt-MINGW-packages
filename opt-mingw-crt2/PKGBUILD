@@ -81,7 +81,7 @@ build() {
 #  export LDFLAGS+=" --allow-multiple-definition"
 # -nostdinc 
 
-  CFLAGS+=" -I${srcdir}/${OPT_MINGW_PREFIX}/${MINGW_CHOST}/include" \
+  CFLAGS+=" -static-libgcc -I${srcdir}/${OPT_MINGW_PREFIX}/${MINGW_CHOST}/include" \
   ${srcdir}/${_sourcedir}/mingw-w64-crt/configure \
     --prefix=${OPT_MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
