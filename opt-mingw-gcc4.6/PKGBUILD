@@ -41,7 +41,7 @@ pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          $([[ "$_enable_objc" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-objc")
         )
 pkgver=${_base_pkg_version}.4
-pkgrel=1
+pkgrel=2
 pkgdesc="GCC ${_base_pkg_version} for the MinGW-w64"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64')
@@ -49,10 +49,10 @@ url="https://gcc.gnu.org"
 license=('GPL' 'LGPL' 'FDL' 'custom')
 groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain")
 makedepends=('lndir' 'make' 'patch' 'bison' 'flex' 'tar' 'diffutils'
-             "${MINGW_PACKAGE_PREFIX}-binutils"
              "${MINGW_PACKAGE_PREFIX}-libiconv"
-             "${MINGW_PACKAGE_PREFIX}-zlib"
              "${MINGW_PACKAGE_PREFIX}-${_basename}-base"
+             "${OPT_PACKAGE_MINGW_PREFIX}-binutils"
+             "${OPT_PACKAGE_MINGW_PREFIX}-zlib"
              $([[ "$_enable_ada" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-ada")
              "${OPT_PACKAGE_MINGW_PREFIX}-crt"
              "${OPT_PACKAGE_MINGW_PREFIX}-headers"
@@ -403,8 +403,8 @@ package_opt-mingw-gcc-libs() {
 package_opt-mingw-gcc() {
   pkgdesc="GNU Compiler Collection (C,C++,OpenMP) for MinGW-w64"
   depends=(
-    "${MINGW_PACKAGE_PREFIX}-binutils"
-    "${MINGW_PACKAGE_PREFIX}-zlib"
+    "${OPT_PACKAGE_MINGW_PREFIX}-binutils"
+    "${OPT_PACKAGE_MINGW_PREFIX}-zlib"
     "${OPT_PACKAGE_MINGW_PREFIX}-crt"
     "${OPT_PACKAGE_MINGW_PREFIX}-headers"
     "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs=${pkgver}-${pkgrel}"
