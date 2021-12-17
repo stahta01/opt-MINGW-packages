@@ -1,16 +1,15 @@
 # Maintainer:  Tim Stahlhut <stahta01@gmail.com>
 # Contributor: Alexey Pavlov <alexpux@gmail.com>
 
-OPT_MINGW_PACKAGE_PREFIX="opt-mingw-$MSYSTEM_CARCH"
-OPT_MINGW_PREFIX="/opt$MINGW_PREFIX"
+OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
+_install_prefix="/opt$MINGW_PREFIX"
 
 _realname=windows-default-manifest
 #_gccnumber=5
 #_gcc_suffix="-${_gccnumber}"
 _gcc_suffix=""
-_install_prefix=$OPT_MINGW_PREFIX
 pkgbase=opt-mingw-${_realname}
-pkgname="${OPT_MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
 pkgver=6.4
 pkgrel=8
 pkgdesc='Default Windows application manifest (mingw-w64)'
@@ -32,10 +31,10 @@ build() {
 
 #  CC=${_install_prefix}/bin/gcc${_gcc_suffix}.exe \
 #  CXX=${_install_prefix}/bin/g++${_gcc_suffix}.exe \
-  
-#  export PATH=${OPT_MINGW_PREFIX}/bin:$PATH
+
+#  export PATH=${_install_prefix}/bin:$PATH
   ./configure \
-    --prefix=${OPT_MINGW_PREFIX}/${MINGW_CHOST} \
+    --prefix=${_install_prefix}/${MINGW_CHOST} \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST}
