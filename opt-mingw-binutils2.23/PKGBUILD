@@ -1,0 +1,97 @@
+# Maintainer:  Tim Stahlhut <stahta01@gmail.com>
+# Contributor: Alexey Pavlov <alexpux@gmail.com>
+
+# Based on https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-binutils
+
+OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
+_install_prefix="/opt$MINGW_PREFIX"
+
+_realname=binutils
+pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
+pkgbase=opt-mingw-${_realname}2.23
+_ver_number=2.23.2
+_ver_suffix=
+#_ver_suffix=a
+_sourcedir=${_realname}-${_ver_number}
+pkgver=${_ver_number}${_ver_suffix}
+pkgrel=1
+pkgdesc="A set of programs to assemble and manipulate binary and object files (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw32' 'mingw64')
+url="http://www.gnu.org/software/binutils/"
+license=('GPL')
+groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain")
+depends=("${OPT_PACKAGE_MINGW_PREFIX}-libiconv" "${OPT_PACKAGE_MINGW_PREFIX}-zlib")
+# checkdepends=('dejagnu' 'bc')
+makedepends=("${OPT_PACKAGE_MINGW_PREFIX}-libiconv" "${OPT_PACKAGE_MINGW_PREFIX}-zlib")
+options=('staticlibs' '!distcc' '!ccache')
+#install=binutils.install
+source=("https://ftp.gnu.org/gnu/binutils/${_sourcedir}${_ver_suffix}.tar.bz2")
+sha256sums=('fe914e56fed7a9ec2eb45274b1f2e14b0d8b4f41906a5194eac6883cfe5c1097')
+
+prepare() {
+  cd ${srcdir}/${_sourcedir}
+
+  # http://sourceware.org/git/?p=binutils.git;a=patch;h=e02bf935
+  # http://sourceware.org/git/?p=binutils.git;a=patch;h=935f8542
+#  patch -p1 -i ${srcdir}/binutils-2.23.2-texinfo-5.0.patch
+
+
+  sed -i 's|#include <sys/stat.h>|//#include <sys/stat.h>|' binutils/rename.c
+
+#  #do not install libiberty
+#  sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
+#  # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
+#  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+}
+
+build() {
+  [[ -d ${srcdir}/build-${MINGW_CHOST} ]] && rm -rf ${srcdir}/build-${MINGW_CHOST}
+  mkdir -p build-${MINGW_CHOST} && cd build-${MINGW_CHOST}
+
+  # binutils 2.19.1 has no suport for many newer linker flags; so, set to only this flag
+  LDFLAGS="-pipe"
+
+  if [ "${CARCH}" = "x86_64" ]; then
+    local _conf='--enable-64-bit-bfd'
+  else
+    local _conf=''
+    LDFLAGS+=" -Wl,--large-address-aware"
+  fi
+
+  export PATH=${_install_prefix}/bin:$PATH
+  echo "PATH := $PATH"
+
+  CFLAGS+=" -static-libgcc"
+  ${srcdir}/${_sourcedir}/configure \
+    --build=${MINGW_CHOST} \
+    --host=${MINGW_CHOST} \
+    --target=${MINGW_CHOST} \
+    --prefix=${_install_prefix} \
+    --disable-werror \
+    --enable-lto \
+    --with-sysroot=${_install_prefix} \
+    --with-libiconv-prefix=${_install_prefix} \
+    $_conf \
+    --disable-nls \
+    --disable-rpath \
+    --disable-multilib
+
+  make
+}
+
+#check() {
+#  cd ${srcdir}/binutils-build
+#
+#  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+#  # do not abort on errors - manually check log files
+#  make LDFLAGS="" -k check || true
+#}
+
+package() {
+  cd build-${MINGW_CHOST}
+  make DESTDIR=${pkgdir} install
+
+  # Remove unwanted files
+  rm -rf ${pkgdir}${_install_prefix}/share
+}
