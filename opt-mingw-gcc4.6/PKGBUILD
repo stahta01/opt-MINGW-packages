@@ -40,8 +40,8 @@ pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          $([[ "$_enable_ada" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-ada")
          $([[ "$_enable_objc" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-objc")
         )
-pkgver=${_base_pkg_version}.3
-pkgrel=7
+pkgver=${_base_pkg_version}.4
+pkgrel=1
 pkgdesc="GCC ${_base_pkg_version} for the MinGW-w64"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64')
