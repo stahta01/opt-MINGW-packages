@@ -11,7 +11,7 @@ pkgbase=mingw-w64-${_realname}2
 pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}2-git" "${OPT_PACKAGE_MINGW_PREFIX}-headers2-git" "${OPT_PACKAGE_MINGW_PREFIX}-pthread-stub-headers2-git")
 replaces=()
 pkgver=2.0.0.2777.24b1f9cdc
-pkgrel=3
+pkgrel=4
 _commit='24b1f9cdcf1d425700312373b14e2a6e58c6d0aa'
 pkgdesc='CRT for Windows (mingw-w64)'
 arch=('any')
@@ -23,9 +23,9 @@ makedepends=('git'
              "${MINGW_PACKAGE_PREFIX}-binutils")
 options=('!strip' 'staticlibs' '!buildflags' '!emptydirs')
 source=("${_sourcedir}"::"git+https://git.code.sf.net/p/mingw-w64/mingw-w64#commit=$_commit"
-        001-Use-do_pseudo_reloc-void-start-void-end-void-base-re.patch)
+        002-crt2-Backport-SVN-5819.patch)
 sha256sums=('SKIP'
-            '6b5106c814286c60e29030a5e9080adbe58dabba992123a57ae55df43399ca79')
+            'a50ec70a18ccc9e847b88c2fd71dbfe777fbfa8f6ade27af4a514ed6008dce99')
 
 # Declare global variables; begin with underscore to avoid name conflicts
 _git_base_commit=
@@ -43,7 +43,7 @@ prepare() {
 
   _git_base_commit=$(git rev-parse HEAD)
 
-  git am --committer-date-is-author-date "${srcdir}/001-Use-do_pseudo_reloc-void-start-void-end-void-base-re.patch"
+  git am --committer-date-is-author-date "${srcdir}/002-crt2-Backport-SVN-5819.patch"
 }
 
 build() {
