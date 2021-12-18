@@ -77,7 +77,7 @@ build() {
     --disable-rpath \
     --disable-multilib
 
-  make
+  make -j1 V=1
 }
 
 #check() {
