@@ -11,7 +11,7 @@ pkgbase=mingw-w64-${_realname}2
 pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}2-git" "${OPT_PACKAGE_MINGW_PREFIX}-headers2-git" "${OPT_PACKAGE_MINGW_PREFIX}-pthread-stub-headers2-git")
 replaces=()
 pkgver=2.0.0.2777.24b1f9cdc
-pkgrel=4
+pkgrel=5
 _commit='24b1f9cdcf1d425700312373b14e2a6e58c6d0aa'
 pkgdesc='CRT for Windows (mingw-w64)'
 arch=('any')
@@ -19,8 +19,8 @@ url='https://mingw-w64.sourceforge.io/'
 license=('custom')
 groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain")
 makedepends=('git'
-             "${MINGW_PACKAGE_PREFIX}-gcc-base"
-             "${MINGW_PACKAGE_PREFIX}-binutils")
+             "${OPT_PACKAGE_MINGW_PREFIX}-gcc-base"
+             "${OPT_PACKAGE_MINGW_PREFIX}-binutils")
 options=('!strip' 'staticlibs' '!buildflags' '!emptydirs')
 source=("${_sourcedir}"::"git+https://git.code.sf.net/p/mingw-w64/mingw-w64#commit=$_commit"
         002-crt2-Backport-SVN-5819.patch)
@@ -97,9 +97,11 @@ package_crt() {
   provides=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
   conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
 
+  export PATH=${_install_prefix}/bin:$PATH
+
   msg "Installing ${MINGW_CHOST} crt"
   cd ${srcdir}/crt-${MINGW_CHOST}
-  make DESTDIR=${pkgdir} install-strip
+  make DESTDIR=${pkgdir} install # install-strip
 }
 
 package_pthread_stub_headers() {
