@@ -11,7 +11,7 @@ _external_minizip=yes
 _realname=zlib
 pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
 pkgver=1.2.11
-pkgrel=2
+pkgrel=3
 pkgdesc="Compression library implementing the deflate compression method found in gzip and PKZIP (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
@@ -19,8 +19,8 @@ groups=("${OPT_PACKAGE_MINGW_PREFIX}")
 license=(ZLIB)
 url="https://www.zlib.net/"
 depends=("${OPT_PACKAGE_MINGW_PREFIX}-bzip2")
-makedepends=("${OPT_PACKAGE_MINGW_PREFIX}-gcc-base")
-options=('!strip' 'staticlibs')
+makedepends=("${MINGW_PACKAGE_PREFIX}-binutils" "${OPT_PACKAGE_MINGW_PREFIX}-gcc-base")
+options=('staticlibs')
 source=("https://zlib.net/current/${_realname}-${pkgver}.tar.gz"
         01-zlib-1.2.11-1-buildsys.mingw.patch
         03-dont-put-sodir-into-L.mingw.patch
