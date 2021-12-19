@@ -11,13 +11,14 @@ _gcc_suffix=""
 pkgbase=opt-mingw-${_realname}
 pkgname="${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
 pkgver=6.4
-pkgrel=8
+pkgrel=9
 pkgdesc='Default Windows application manifest (mingw-w64)'
 url='https://cygwin.com/'
 arch=('any')
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 license=('BSD')
-makedepends=('git' "${MINGW_PACKAGE_PREFIX}-gcc-base")
+makedepends=('git' "${OPT_PACKAGE_MINGW_PREFIX}-gcc-base")
+options=('!strip')
 _GIT_TAG="release-6_4"
 source=("git+https://sourceware.org/git/cygwin-apps/${_realname}.git#tag=${_GIT_TAG}")
 sha256sums=('SKIP')
@@ -32,7 +33,7 @@ build() {
 #  CC=${_install_prefix}/bin/gcc${_gcc_suffix}.exe \
 #  CXX=${_install_prefix}/bin/g++${_gcc_suffix}.exe \
 
-#  export PATH=${_install_prefix}/bin:$PATH
+  export PATH=${_install_prefix}/bin:$PATH
   ./configure \
     --prefix=${_install_prefix}/${MINGW_CHOST} \
     --build=${MINGW_CHOST} \
