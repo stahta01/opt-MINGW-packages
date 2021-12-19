@@ -41,7 +41,7 @@ pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          $([[ "$_enable_objc" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-objc")
         )
 pkgver=${_base_pkg_version}.4
-pkgrel=1
+pkgrel=3
 pkgdesc="GCC ${_base_pkg_version} for (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64')
@@ -49,7 +49,7 @@ url="https://gcc.gnu.org"
 license=('GPL' 'LGPL' 'FDL' 'custom')
 groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain")
 makedepends=('lndir' 'make' 'patch' 'bison' 'flex' 'tar' 'diffutils'
-             "${MINGW_PACKAGE_PREFIX}-${_basename}-base"
+             "${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-base"
              "${OPT_PACKAGE_MINGW_PREFIX}-libiconv"
              "${OPT_PACKAGE_MINGW_PREFIX}-zlib"
              "${OPT_PACKAGE_MINGW_PREFIX}-binutils"
@@ -62,7 +62,7 @@ if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
 fi
 checkdepends=('dejagnu')
 optdepends=()
-options=('strip' '!debug' 'staticlibs' '!emptydirs' '!buildflags')
+options=('!strip' '!debug' 'staticlibs' '!emptydirs' '!buildflags')
 GMP_VERSION=4.3.2
 MPFR_VERSION=2.4.2
 MPC_VERSION=0.8.1
