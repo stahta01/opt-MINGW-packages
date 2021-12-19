@@ -30,7 +30,7 @@ cd ../opt-mingw-bzip2 && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
 _copy_data_to_repo opt-mingw-i686-bzip2 && \
 cd ../opt-mingw-zlib && \
-MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
+MINGW_ARCH="mingw32" makepkg-mingw -Lf -C --install --noconfirm && \
 _copy_data_to_repo opt-mingw-i686-zlib && \
 cd ../opt-mingw-libiconv && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
