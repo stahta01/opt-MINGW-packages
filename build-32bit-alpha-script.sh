@@ -7,6 +7,7 @@ _build_alpha_32bit() {
   cd packages && rm -f *.zst && rm -f *.zip && cd ..                    && \
   ./download-gcc4.5-32bit-packages.sh                                   && \
   cd packages && pacman -U *.zst --noconfirm && cd ..                   && \
+  ./install-build-prerequisites.sh                                      && \
   ./build-and-install-crt2-32bit-packages.sh                            && \
   ./build-and-install-binutils2.23-32bit-packages.sh                    && \
   ./build-and-install-gcc4.5-32bit-packages.sh                          && \
