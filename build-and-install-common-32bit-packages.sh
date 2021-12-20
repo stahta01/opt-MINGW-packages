@@ -26,12 +26,6 @@ cd opt-mingw-windows-default-manifest && \
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
 _copy_data_to_repo opt-mingw-i686-windows-default-manifest && \
-cd ../opt-mingw-bzip2 && \
-MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-i686-bzip2 && \
 cd ../opt-mingw-zlib && \
 MINGW_ARCH="mingw32" makepkg-mingw -Lf -C --install --noconfirm && \
-_copy_data_to_repo opt-mingw-i686-zlib && \
-cd ../opt-mingw-libiconv && \
-MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
-_copy_data_to_repo opt-mingw-i686-libiconv opt-mingw-i686-iconv
+_copy_data_to_repo opt-mingw-i686-zlib
