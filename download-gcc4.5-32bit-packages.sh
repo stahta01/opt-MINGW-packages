@@ -1,5 +1,5 @@
 _download_packages() {
-  local git_tag="GCC4.5_alpha_3"
+  local git_tag="GCC4.5_alpha_4"
 
   wget -nc https://github.com/stahta01/opt-MINGW-packages/releases/download/${git_tag}/32bit.zip && \
   7za e 32bit.zip && \
