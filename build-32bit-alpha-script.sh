@@ -4,6 +4,7 @@ _build_alpha_32bit() {
   pacman -R --noconfirm --cascade opt-mingw-i686-gcc4.6-libs    || true && \
   pacman -R --noconfirm --cascade opt-mingw-i686-gcc4.7-libs    || true && \
   pacman -R --noconfirm --cascade opt-mingw-i686-zlib           || true && \
+  pacman -R --noconfirm --cascade opt-mingw-i686-headers1-git   || true && \
   pacman -R --noconfirm --cascade opt-mingw-i686-headers2-git   || true && \
   pacman -R --noconfirm --cascade opt-mingw-i686-headers3-git   || true && \
   ./install-build-prerequisites.sh                                      && \
