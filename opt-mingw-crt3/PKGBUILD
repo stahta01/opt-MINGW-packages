@@ -11,7 +11,7 @@ pkgbase=mingw-w64-${_realname}3
 pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}3-git" "${OPT_PACKAGE_MINGW_PREFIX}-headers3-git" "${OPT_PACKAGE_MINGW_PREFIX}-pthread-stub-headers3-git")
 replaces=()
 pkgver=3.4.0.3935.8c7e00886
-pkgrel=5
+pkgrel=6
 _commit='8c7e00886f69c448270376601fe1c016392e26f9'
 pkgdesc='CRT for Windows (mingw-w64)'
 arch=('any')
@@ -19,7 +19,7 @@ url='https://mingw-w64.sourceforge.io/'
 license=('custom')
 groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain")
 makedepends=('git'
-             "${MINGW_PACKAGE_PREFIX}-gcc-base"
+             "${OPT_PACKAGE_MINGW_PREFIX}-gcc-base"
              "${MINGW_PACKAGE_PREFIX}-binutils")
 options=('!strip' 'staticlibs' '!buildflags' '!emptydirs')
 source=("${_sourcedir}"::"git+https://git.code.sf.net/p/mingw-w64/mingw-w64#commit=$_commit"
