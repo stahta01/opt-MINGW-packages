@@ -15,8 +15,7 @@ _build_alpha_32bit() {
   ./download-gcc4.5-32bit-packages.sh                                   && \
   cd packages && pacman -U *.zst --noconfirm && cd ..                   && \
   pacman -S --noconfirm mingw-w64-i686-binutils                         && \
-  ./build-and-install-gcc4.5-32bit-packages.sh                          && \
-  ./build-and-install-crt2-32bit-packages.sh                            && \
+  ./build-and-install-crt1-32bit-packages.sh                            && \
   ./build-and-install-binutils2.23-32bit-packages.sh                    && \
   ./build-and-install-gcc4.5-32bit-packages.sh                          && \
   ./build-and-install-common-32bit-packages.sh
