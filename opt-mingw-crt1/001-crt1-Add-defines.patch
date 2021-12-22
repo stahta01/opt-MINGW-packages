@@ -1,0 +1,29 @@
+From 06df690829d3f69169cc09022c8b5999a1e9f9dc Mon Sep 17 00:00:00 2001
+From: Tim Stahlhut <stahta01@gmail.com>
+Date: Tue, 21 Dec 2021 18:16:58 -0500
+Subject: Add defines
+
+---
+ mingw-w64-headers/include/winnt.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/mingw-w64-headers/include/winnt.h b/mingw-w64-headers/include/winnt.h
+index 65f2f7ac7..8eba09e41 100644
+--- a/mingw-w64-headers/include/winnt.h
++++ b/mingw-w64-headers/include/winnt.h
+@@ -3650,9 +3650,14 @@ typedef DWORD LCID;
+ 
+ #define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L)
+ #define IO_REPARSE_TAG_HSM (0xC0000004L)
++#define IO_REPARSE_TAG_HSM2 (0x80000006L)
+ #define IO_REPARSE_TAG_SIS (0x80000007L)
++#define IO_REPARSE_TAG_WIM (0x80000008L)
++#define IO_REPARSE_TAG_CSV (0x80000009L)
+ #define IO_REPARSE_TAG_DFS (0x8000000AL)
+ #define IO_REPARSE_TAG_FILTER_MANAGER (0x8000000BL)
++#define IO_REPARSE_TAG_DFSR (0x80000012L)
++#define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
+ #define IO_COMPLETION_MODIFY_STATE 0x0002
+ #define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)
+ #define DUPLICATE_CLOSE_SOURCE 0x00000001
+-- 

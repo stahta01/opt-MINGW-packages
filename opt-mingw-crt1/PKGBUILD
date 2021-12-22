@@ -1,0 +1,131 @@
+# Maintainer:  Tim Stahlhut <stahta01@gmail.com>
+# Contributor: Alexey Pavlov <alexpux@gmail.com>
+
+OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
+_install_prefix="/opt$MINGW_PREFIX"
+
+_realname=crt
+_sourcedir=mingw-w64-git
+_crtnumber=1
+pkgbase=mingw-w64-${_realname}1
+pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}1-git" "${OPT_PACKAGE_MINGW_PREFIX}-headers1-git")
+replaces=()
+pkgver=1.0.0.671.42c035867
+pkgrel=1
+_commit='42c03586746df2117eaeae5ce8151d9bd258b70c'
+pkgdesc='CRT for Windows (mingw-w64)'
+arch=('any')
+url='https://mingw-w64.sourceforge.io/'
+license=('custom')
+groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain")
+makedepends=('git'
+             "${OPT_PACKAGE_MINGW_PREFIX}-gcc-base"
+             "${MINGW_PACKAGE_PREFIX}-binutils")
+options=('!strip' 'staticlibs' '!buildflags' '!emptydirs')
+source=("${_sourcedir}"::"git+https://git.code.sf.net/p/mingw-w64/mingw-w64#commit=$_commit"
+        '001-crt1-Add-defines.patch' )
+sha256sums=('SKIP'
+            '8c647954d9016784668b6d5c04609a6157fc8a3cd915b907d90a63b0f13aa6c2')
+
+# Declare global variables; begin with underscore to avoid name conflicts
+_git_base_commit=
+
+pkgver() {
+  cd "${srcdir}/${_sourcedir}"
+  local _major=$(head -n 16 mingw-w64-headers/include/_mingw_mac.h | grep '__MINGW64_VERSION_MAJOR' | head -n 1 | sed -e 's/MINGW64//' | sed -e 's/.* //' | tr '_[A-Z]\n' ' ' | sed 's/.$/\n/')
+  local _minor=$(head -n 16 mingw-w64-headers/include/_mingw_mac.h | grep '__MINGW64_VERSION_MINOR' | head -n 1 | sed -e 's/MINGW64//' | sed -e 's/.* //' | tr '_[A-Z]\n' ' ' | sed 's/.$/\n/')
+  local _rev=0
+  printf "%s.%s.%s.%s.%s" ${_major} ${_minor} ${_rev} "$(git rev-list --count ${_git_base_commit})" "$(git rev-parse --short ${_git_base_commit})"
+}
+
+prepare() {
+  cd "${srcdir}/${_sourcedir}"
+
+  _git_base_commit=$(git rev-parse HEAD)
+
+  git am --committer-date-is-author-date "${srcdir}/001-crt1-Add-defines.patch"
+}
+
+build() {
+  msg "Configuring ${MINGW_CHOST} headers"
+  [[ -d ${srcdir}/headers-${MINGW_CHOST} ]] && rm -rf ${srcdir}/headers-${MINGW_CHOST}
+  mkdir -p ${srcdir}/headers-${MINGW_CHOST} && cd ${srcdir}/headers-${MINGW_CHOST}
+
+  export PATH=${_install_prefix}/bin:$PATH
+
+  ${srcdir}/${_sourcedir}/mingw-w64-headers/configure \
+    --build=${MINGW_CHOST} \
+    --host=${MINGW_CHOST} \
+    --target=${MINGW_CHOST} \
+    --prefix=${_install_prefix}
+
+  msg "Installing local copy of ${MINGW_CHOST} headers"
+  cd ${srcdir}/headers-${MINGW_CHOST}
+  rm -fr ${srcdir}/${_install_prefix}/${MINGW_CHOST}/include
+  make DESTDIR=${srcdir} install
+
+  msg "Building ${MINGW_CHOST} CRT"
+  case "$CARCH" in
+    i686)
+      _crt_configure_args="--disable-lib64 --enable-lib32"
+    ;;
+    x86_64)
+      _crt_configure_args="--disable-lib32 --enable-lib64"
+    ;;
+  esac
+
+  [[ -d ${srcdir}/crt-${MINGW_CHOST} ]] && rm -rf ${srcdir}/crt-${MINGW_CHOST}
+  mkdir -p ${srcdir}/crt-${MINGW_CHOST} && cd ${srcdir}/crt-${MINGW_CHOST}
+
+#  export ARFLAGS+=" --allow-multiple-definition"
+  CFLAGS+=" -I${srcdir}/${_install_prefix}/${MINGW_CHOST}/include" \
+  CPP="${_install_prefix}/bin/i686-w64-mingw32-gcc.exe -E" \
+  ${srcdir}/${_sourcedir}/mingw-w64-crt/configure \
+    --prefix=${_install_prefix} \
+    --build=${MINGW_CHOST} \
+    --host=${MINGW_CHOST} \
+    --target=${MINGW_CHOST} \
+    --with-sysroot=${srcdir}/${_install_prefix} \
+    --enable-wildcard \
+    ${_crt_configure_args}
+  make V=1
+}
+
+package_crt() {
+  pkgdesc='CRT for Windows (mingw-w64)'
+  depends=("${OPT_PACKAGE_MINGW_PREFIX}-headers${_crtnumber}-git=${pkgver}-${pkgrel}")
+  provides=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
+  conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
+
+  msg "Installing ${MINGW_CHOST} crt"
+  cd ${srcdir}/crt-${MINGW_CHOST}
+  make DESTDIR=${pkgdir} install-strip
+}
+
+package_headers() {
+  pkgdesc="headers for Windows (mingw-w64)"
+  provides=("${OPT_PACKAGE_MINGW_PREFIX}-headers")
+  conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-headers" "${OPT_PACKAGE_MINGW_PREFIX}-pthread-stub-headers")
+
+  msg "Copying ${MINGW_CHOST} headers"
+  mkdir -p ${pkgdir}${_install_prefix}/${MINGW_CHOST}
+  cp --recursive ${srcdir}${_install_prefix}/${MINGW_CHOST}/include ${pkgdir}${_install_prefix}/${MINGW_CHOST}/
+
+  msg "Installing MinGW-w64 licenses"
+  install -Dm644 ${srcdir}/${_sourcedir}/mingw-w64-headers/ddk/readme.txt ${pkgdir}${_install_prefix}/share/licenses/${_realname}/ddk-readme.txt
+  install -Dm644 ${srcdir}/${_sourcedir}/mingw-w64-headers/direct-x/COPYING.LIB ${pkgdir}${_install_prefix}/share/licenses/${_realname}/direct-x-COPYING.LIB
+  install -Dm644 ${srcdir}/${_sourcedir}/mingw-w64-headers/direct-x/readme.txt ${pkgdir}${_install_prefix}/share/licenses/${_realname}/direct-x-readme.txt
+}
+
+package_opt-mingw-i686-crt1-git() {
+  package_crt
+}
+package_opt-mingw-i686-headers1-git() {
+  package_headers
+}
+package_opt-mingw-x86_64-crt1-git() {
+  package_crt
+}
+package_opt-mingw-x86_64-headers1-git() {
+  package_headers
+}
