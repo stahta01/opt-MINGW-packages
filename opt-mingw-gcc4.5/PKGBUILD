@@ -12,9 +12,9 @@ OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
 _install_prefix="/opt$MINGW_PREFIX"
 
 _enable_ada=no
-_enable_cxx=no
-_enable_fortran=no
-_enable_objc=no
+_enable_cxx=yes
+_enable_fortran=yes
+_enable_objc=yes
 
 _enable_3_stages=no
 _enable_graphite=no         # yes needs fixed                   library graphite added in GCC 4.4
@@ -25,7 +25,6 @@ if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
 else
   _enable_libgomp=no
 fi
-_enable_libquadmath=no
 
 _basename=gcc
 _base_pkg_version=4.5
@@ -41,7 +40,7 @@ pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
          $([[ "$_enable_objc" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-objc")
         )
 pkgver=${_base_pkg_version}.4
-pkgrel=4
+pkgrel=5
 pkgdesc="GCC ${_base_pkg_version} for (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64')
@@ -290,12 +289,6 @@ build() {
     configure_opts+=("--disable-libgomp")
   fi
 
-  if [ "$_enable_libquadmath" == "yes" ]; then
-    configure_opts+=("--enable-libquadmath")
-  elif [ "$_enable_libquadmath" == "no" ]; then
-    configure_opts+=("--disable-libquadmath")
-  fi
-
   local _languages="c"
   if [ "$_enable_ada" == "yes" ]; then
     _languages+=",ada"
@@ -397,9 +390,6 @@ package_opt-mingw-gcc-libs() {
   if [ "$_enable_libgomp" == "yes" ]; then
     cp bin/libgomp*.dll ${pkgdir}${_install_prefix}/bin/
   fi
-  if [ "$_enable_libquadmath" != "no" ]; then
-    cp bin/libquadmath*.dll ${pkgdir}${_install_prefix}/bin/
-  fi
 }
 
 package_opt-mingw-gcc() {
@@ -464,9 +454,6 @@ package_opt-mingw-gcc() {
   if [ "$_enable_libgomp" == "yes" ]; then
     cp lib/gcc/${MINGW_CHOST}/${pkgver}/libgomp.*           ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
   fi
-  if [ "$_enable_libquadmath" != "no" ]; then
-    cp lib/gcc/${MINGW_CHOST}/${pkgver}/libquadmath.*       ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
-  fi
   cp lib/gcc/${MINGW_CHOST}/${pkgver}/libssp*               ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
   cp lib/gcc/${MINGW_CHOST}/${pkgver}/lto*.exe              ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${pkgver}/
 
@@ -496,9 +483,6 @@ package_opt-mingw-gcc() {
   cp share/info/gccint.info*                                ${pkgdir}${_install_prefix}/share/info/
   if [ "$_enable_libgomp" == "yes" ]; then
     cp share/info/libgomp.info*                             ${pkgdir}${_install_prefix}/share/info/
-  fi
-  if [ "$_enable_libquadmath" != "no" ]; then
-    cp share/info/libquadmath.info*                         ${pkgdir}${_install_prefix}/share/info/
   fi
 
   #cp share/locale/* ${pkgdir}${_install_prefix}/share/locale/
