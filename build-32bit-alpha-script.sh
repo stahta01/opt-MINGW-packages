@@ -19,7 +19,7 @@ _build_alpha_32bit() {
   pacman -S --needed --noconfirm mingw-w64-i686-binutils                && \
   ./build-and-install-crt1-32bit-packages.sh                            && \
   ./build-and-install-binutils2.23-32bit-packages.sh                    && \
-  ./build-and-install-gcc4.5-32bit-packages.sh                          && \
+  ./build-and-install-gcc4.4-32bit-packages.sh                          && \
   ./build-and-install-common-32bit-packages.sh
 }
 
