@@ -1,0 +1,44 @@
+From 039d11d263e42c20a3155fd03e4f97ffb78ede34 Mon Sep 17 00:00:00 2001
+From: Jakub Jelinek <jakub@redhat.com>
+Date: Thu, 21 Feb 2013 10:40:44 +0100
+Subject: Partial backport of SVN 196196 PR 56258
+
+  Patch edited by Tim S
+
+	PR bootstrap/56258
+	* gnat-style.texi (@title): Remove @hfill.
+
+	* doc/cp-tools.texinfo (Virtual Machine Options): Use just
+	one @gccoptlist instead of 3 separate ones.
+---
+ gcc/ada/gnat-style.texi                | 2 +-
+ libjava/classpath/doc/cp-tools.texinfo | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/ada/gnat-style.texi b/gcc/ada/gnat-style.texi
+index 37395c722ff..670f45d454c 100644
+--- a/gcc/ada/gnat-style.texi
++++ b/gcc/ada/gnat-style.texi
+@@ -42,7 +42,7 @@ Texts.  A copy of the license is included in the section entitled
+ @titlepage
+ @titlefont{GNAT Coding Style:}
+ @sp 1
+-@title @hfill A Guide for GNAT Developers
++@title A Guide for GNAT Developers
+ @subtitle GNAT, The GNU Ada Compiler
+ @versionsubtitle
+ @author Ada Core Technologies, Inc.
+diff --git a/libjava/classpath/doc/cp-tools.texinfo b/libjava/classpath/doc/cp-tools.texinfo
+index f7a2d245e7d..72769624881 100644
+--- a/libjava/classpath/doc/cp-tools.texinfo
++++ b/libjava/classpath/doc/cp-tools.texinfo
+@@ -2022,7 +2022,7 @@ Doclet, grouped by type.  Explanations are in the following sections.
+ 
+ @item Virtual Machine Options
+ @xref{Virtual Machine Options,,Options Controlling Gjdoc Behavior}.
+-@gccoptlist{-classpath}  @gccoptlist{-bootclasspath}  @gccoptlist{-J}@var{vmopt}
++@gccoptlist{-classpath  -bootclasspath  -J @var{vmopt}}
+ 
+ @end table
+ 
+-- 
