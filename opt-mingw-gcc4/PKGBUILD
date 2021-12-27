@@ -1,0 +1,558 @@
+# Maintainer:  Tim Stahlhut <stahta01@gmail.com>
+# Contributor: Alexey Pavlov <alexpux@gmail.com>
+# Contributor: Alexey Borzenkov <snaury@gmail.com>
+# Contributor: Ray Donnelly <mingw.android@gmail.com>
+# Contributor: Renato Silva <br.renatosilva@gmail.com>
+# Contributor: wirx6 <wirx654@gmail.com>
+# Contributor: Kirill Müller <krlmlr@mailbox.org>
+
+# Based on https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-gcc
+
+OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
+_install_prefix="/opt$MINGW_PREFIX"
+
+_enable_ada=no
+_enable_cxx=no
+
+_enable_shared=yes   # more code guards needs added
+_enable_3_stages=no
+_enable_graphite=no  # yes is broken
+_enable_threads=yes
+_threads="win32"
+if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
+  _enable_libgomp=yes
+else
+  _enable_libgomp=no
+fi
+
+_basename=gcc
+_realname=${_basename}4
+_gcc_suffix=""
+pkgbase=opt-mingw-${_realname}
+pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
+         "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs"
+         $([[ "$_enable_ada" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-ada")
+        )
+pkgver=4.5.4.d20120702+42.c10.g41eccc86828
+pkgrel=1
+pkgdesc="GCC 4 git for (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw32' 'mingw64')
+url="https://gcc.gnu.org"
+license=('GPL' 'LGPL' 'FDL' 'custom')
+groups=("${OPT_PACKAGE_MINGW_PREFIX}-toolchain")
+makedepends=('lndir' 'make' 'patch' 'bison' 'flex' 'tar' 'diffutils'
+             "${MINGW_PACKAGE_PREFIX}-binutils" # needed for strip binary
+             "${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-base"
+             "${OPT_PACKAGE_MINGW_PREFIX}-libiconv"
+             "${OPT_PACKAGE_MINGW_PREFIX}-zlib"
+             "${OPT_PACKAGE_MINGW_PREFIX}-binutils"
+             $([[ "$_enable_ada" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-ada")
+             "${OPT_PACKAGE_MINGW_PREFIX}-crt"
+             "${OPT_PACKAGE_MINGW_PREFIX}-headers"
+             "${OPT_PACKAGE_MINGW_PREFIX}-windows-default-manifest")
+if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
+  makedepends+=("${OPT_PACKAGE_MINGW_PREFIX}-winpthreads")
+fi
+checkdepends=('dejagnu')
+optdepends=()
+options=('!debug' 'staticlibs' '!emptydirs' '!buildflags')
+ _git_branch=releases/gcc-4.5                                         # CRT1 builds; GCC building 1st time
+#_git_commit=310b8e53fe588696b2ecafdbb4e9404eeca88257 # SVN: r173115  # start 4.5.4
+#_git_commit=637279192ef0678b8ea001074d25bb5067c6d8ce # SVN: r167948  # start 4.5.3
+#_git_commit=ddd656934e095b1d15915aa307ed45a77887df22 # SVN: r162777  # start 4.5.2
+#_git_commit=119fc32422d1394a331ff722f2744d85473b7d80 # SVN: r158342  # start 4.5.1
+#_git_commit=2f77df704ff54372859661815055b84056a75e41 # SVN: r158338  # CRT1 builds <---- 1
+#_git_commit=06ae20223412c95fe31aa29748ac53449532f6e1 # SVN: r151542  # CRT1 builds <---- 2
+#_git_commit=3845b0a0765476d137e0a87f8ece4d9483be3628 # SVN: r150139  # 2804 CRT1 needs built; GCC Build failed
+#_git_commit=98b50196d1df6804035208d8ea37b3c80e95448e # SVN: r150103  # CRT1 builds; GCC built okay except it seems to be missing DLLs
+#_git_commit=05b5c4e8742e5deba247f5a68eec43b13e88ce8c # SVN: r150072  # 2760 <---- 3
+#_git_commit=56131eb5a0492df3fd6421db599ed6f3b42545c6 # SVN: r149307  # CRT1 builds; GCC built okay; but, cannot build GCC mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=e2e23550fca10255ad0251e10c53fbeecc8bc057 # SVN: r149268  # 2356
+#_git_commit=bf15d4697d6d4605699730e286f822ed27ff180d # SVN: r149246  # 2352
+#_git_commit=07302a1bb6c0842e0bf214ec7d551a99c76efa8f # SVN: r149216  # 2335
+#_git_commit=f0e410bca1566df48d5a8e5099271c9caf1fb5c9 # SVN: r149204  # 2327 <---- 4
+#_git_commit=b0f0c817838b52f1c5a769d6a6b38be9669e7988 # SVN: r149162  # 2310
+#_git_commit=429a907c9aad98f4cee72a79ec9c50c3d5fde320 # SVN: r149126  # 2288
+#_git_commit=15ab11cb467e45ef04da8c8521db0e80e83bfaad # SVN: r149073  # 2255 GCC mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=152413f7edcf11d34026246569f5145d414f1653 # SVN: r149043  # 2238 GCC mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=9218bba42b6f57d8eb5ade01fd0c0fda9a57d3b2 # SVN: r148958  # GCC mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=6ae467eadc27db1267c9793a9b2f632ecb156bad # SVN: r148925  # 2164
+#_git_commit=cdfcf5f9c0d86170d56f798bc00df57e446c386c # SVN: r148640  # Error building shared libgcc
+                                                                      # 09xx
+#_git_commit=a143dc135e37cef5f228e79a4b0acadacf83e6e6 # SVN: r145125  # CRT1 needs built
+#_git_commit=e54d52a8fb13d13b5ec27ef02617f053267d13b9 # SVN: r145124  # start 4.5.0
+_git_repo_url=git://github.com/stahta01/gcc4_main_development.git
+_sourcedir=${_basename}4-main-dev-git
+
+if [ -n "$_git_branch" ]; then
+  source=(${_sourcedir}::"${_git_repo_url}#branch=$_git_branch")
+elif [ -n "$_git_tag" ]; then
+  source=(${_sourcedir}::"${_git_repo_url}#tag=$_git_tag")
+elif [ -n "$_git_commit" ]; then
+  source=(${_sourcedir}::"${_git_repo_url}#commit=$_git_commit")
+else
+  source=(${_sourcedir}::"${_git_repo_url}")
+fi
+GMP_VERSION=4.3.2
+MPFR_VERSION=2.4.2
+MPC_VERSION=0.8.1
+ISL_VERSION=0.15
+CLOOG_VERSION=0.15.11
+PPL_VERSION=0.10.2
+noextract=("${_sourcedir}.tar.bz2"
+           "mpfr-$MPFR_VERSION.tar.bz2"
+           "gmp-$GMP_VERSION.tar.bz2"
+           "mpc-$MPC_VERSION.tar.gz"
+           "isl-$ISL_VERSION.tar.bz2"
+           "cloog-ppl-${CLOOG_VERSION}.tar.gz"
+           "ppl-${PPL_VERSION}.tar.gz")
+source+=("ftp://gcc.gnu.org/pub/gcc/infrastructure/mpfr-${MPFR_VERSION}.tar.bz2"
+        "ftp://gcc.gnu.org/pub/gcc/infrastructure/gmp-${GMP_VERSION}.tar.bz2"
+        "ftp://gcc.gnu.org/pub/gcc/infrastructure/mpc-${MPC_VERSION}.tar.gz"
+        "ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-${ISL_VERSION}.tar.bz2"
+        "ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-ppl-${CLOOG_VERSION}.tar.gz"
+        "ftp://gcc.gnu.org/pub/gcc/infrastructure/ppl-${PPL_VERSION}.tar.gz"
+        130-gcc-4.3-dont-escape-arguments-that-dont-need-it-in-pex-win32.c.patch
+        140-gcc-4.0-fix-for-windows-not-minding-non-existant-parent-dirs.patch
+        150-gcc-4.0-windows-lrealpath-no-force-lowercase-nor-backslash.patch
+        210-gcc-4.4-ktietz-libgomp.patch
+        801-gcc-4.0-cfns-fix-mismatch-in-gnu_inline-attributes.patch
+        802-gcc-4.0-xm-mingw32.h-__USE_MINGW_ANSI_STDIO.patch
+        803-gcc-4.4-add-DWARF2_UNWIND_INFO-guard.patch
+        804-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch 
+        805-gcc-4.4-PR-bootstrap-56258.patch
+        806-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch
+        807-gcc-4.5-Fix-texi-docs-syntax-errors.patch)
+sha256sums=('SKIP'
+            'c7e75a08a8d49d2082e4caee1591a05d11b9d5627514e678f02d66a124bcf2ba'
+            '936162c0312886c21581002b79932829aa048cfaf9937c6265aeaa14f1cd1775'
+            'e664603757251fd8a352848276497a4c79b7f8b21fd8aedd5cc0598a38fee3e4'
+            '8ceebbf4d9a81afa2b4449113cee4b7cb14a687d7a549a963deb5e2a41458b6b'
+            '7cd634d0b2b401b04096b545915ac67f883556e9a524e8e803a6bf6217a84d5f'
+            'd0389838575a7e003542fe996cce54bb0405f9a011424ba7384d12a634219e52'
+            'c7870683c9e6b7606ed9e67f95c0deb9483844d04b8817fd95e1452da719a779'
+            '06ec848499f2e802cd1da77341eea4e59d98e41cddd90769e7996a7b580ae6a7'
+            '44d7f21e073c292e74ee7ee9858e31e993a4816af0a2ee09e0bb2acb557d2d33'
+            'efd0d90eda577db320f1ed704efa5be87c4da09f1c95c3d067e0b563e477e579'
+            'e0442e147448bd725d39bb8ce82b8e939ccc5b33b228388b43138022f1452b4c'
+            '479ed5348b5946a0c1cf44d2ad5420fbd0a9b5266f11b7d4da222da1f0ba37d9'
+            '61ea8447420cecad5c7dbe8dd29711f13afee076f87bc75105e11d9f64b820b9'
+            '2cf58796ddc8df115b27fb9058f8368a587e446e1545f40efedd7790ba3996f0'
+            '7f4b6dd96249f7bdc83f254f7f0ccf4704a89b52d63760ba9f4d5b8c4635ac04'
+            '477e63bc51c75bce7cdef533f406b53eba23482bd797ad71d8ec519a5605c1b7'
+            '1e6acefcabd0899ba94cdc7ae83c3e26a5096f182fd0747ff1d02cbf3b22c77e')
+
+_extract_to_gcc_folder() {
+    local tarfile="$1"
+    local subfolder="$(echo "$tarfile" | sed 's/-.*$//')"
+    if [ ! -d  "$_sourcedir/$subfolder" ]; then
+        echo "Extracting ${tarfile} to $_sourcedir/$subfolder"
+        mkdir -p "$_sourcedir/$subfolder"
+        tar -x --strip-components=1 -f "$tarfile" -C "$_sourcedir/$subfolder"
+    else
+        echo "Folder $_sourcedir/$subfolder already exists"
+    fi
+}
+# =========================================== #
+
+_git_base_commit=
+_gcc_version=
+_gcc_date=
+
+pkgver() {
+  cd ${srcdir}/${_sourcedir}
+  printf "%s.d%s+%s.c%s.g%s" "$_gcc_version" "$_gcc_date" $(git rev-list --count $(git rev-list -1 ${_git_base_commit} gcc/DATESTAMP)..${_git_base_commit}) $(git rev-list --count ${_git_base_commit}..HEAD) $(git rev-parse --short ${_git_base_commit})
+}
+
+prepare() {
+  cd ${srcdir}
+
+  _extract_to_gcc_folder          mpfr-${MPFR_VERSION}.tar.bz2
+  _extract_to_gcc_folder          gmp-${GMP_VERSION}.tar.bz2
+  _extract_to_gcc_folder          mpc-${MPC_VERSION}.tar.gz
+
+  if [[ "$_enable_graphite" == "yes" ]]; then
+    _extract_to_gcc_folder       isl-${ISL_VERSION}.tar.bz2
+    _extract_to_gcc_folder       cloog-ppl-${CLOOG_VERSION}.tar.gz
+    _extract_to_gcc_folder       ppl-${PPL_VERSION}.tar.gz
+  else
+    rm -fr ${srcdir}/${_sourcedir}/isl
+    rm -fr ${srcdir}/${_sourcedir}/cloog
+  fi
+
+  cd ${srcdir}/${_sourcedir}
+
+  _git_base_commit=$(git rev-parse HEAD)
+  _gcc_version=$(head -n 34 gcc/BASE-VER | sed -e 's/.* //' | tr -d '"\n')
+  _gcc_date=$(head -n 34 gcc/DATESTAMP | sed -e 's/.* //' | tr -d '"\n')
+
+  #do not install libiberty
+  sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
+
+  # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
+  sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+
+  # do not expect $prefix/mingw symlink - this should be superceded by
+  # 160-mingw-dont-ignore-native-system-header-dir.patch .. but isn't!
+  [[ -f configure.src ]] && {
+    rm -f configure
+    cp configure.src configure
+  } || {
+    cp configure configure.src
+  }
+  sed -i 's/${prefix}\/mingw\//${prefix}\//g' configure
+
+  # change hardcoded /mingw prefix to the real prefix
+  [[ -f gcc/config/i386/mingw32.h.src ]] && {
+    rm -f gcc/config/i386/mingw32.h
+    cp gcc/config/i386/mingw32.h.src gcc/config/i386/mingw32.h
+  } || {
+    cp gcc/config/i386/mingw32.h gcc/config/i386/mingw32.h.src
+  }
+  local MINGW_NATIVE_PREFIX=$(cygpath -am ${_install_prefix}/${MINGW_CHOST})
+  sed -i "s/\\/mingw\\//${MINGW_NATIVE_PREFIX//\//\\/}\\//g" gcc/config/i386/mingw32.h
+
+  # FIX "The directory that should contain system headers does not exist: /mingw/include"
+  sed -i "s|/mingw/include|/mingw32/include|g" gcc/config/i386/t-mingw32
+  sed -i "s|/mingw/include|/mingw64/include|g" gcc/config/i386/t-mingw-w64
+
+  GIT_AM="git am --committer-date-is-author-date"
+
+  # Don't waste valuable commandline chars on double-quotes around "arguments"
+  #  that don't need them.
+  ${GIT_AM} ${srcdir}/130-gcc-4.3-dont-escape-arguments-that-dont-need-it-in-pex-win32.c.patch
+
+  # Make Windows behave the same as Posix in the consideration of whether folder
+  # "/exists/doesnt-exist/.." is a valid path.. in Posix, it isn't.
+  ${GIT_AM} ${srcdir}/140-gcc-4.0-fix-for-windows-not-minding-non-existant-parent-dirs.patch
+
+  # Don't make a lowercase backslashed path from argv[0]
+  #  that then fail to strcmp with prefix(es) .. they're also ugly.
+  ${GIT_AM} --whitespace=fix ${srcdir}/150-gcc-4.0-windows-lrealpath-no-force-lowercase-nor-backslash.patch
+
+  # Kai's libgomp fix.
+  ${GIT_AM} ${srcdir}/210-gcc-4.4-ktietz-libgomp.patch
+
+  # https://patchwork.ozlabs.org/patch/504982/
+  ${GIT_AM} ${srcdir}/801-gcc-4.0-cfns-fix-mismatch-in-gnu_inline-attributes.patch
+
+  ${GIT_AM} ${srcdir}/802-gcc-4.0-xm-mingw32.h-__USE_MINGW_ANSI_STDIO.patch
+  ${GIT_AM} ${srcdir}/803-gcc-4.4-add-DWARF2_UNWIND_INFO-guard.patch || $( true; git am --abort)
+  ${GIT_AM} --whitespace=fix ${srcdir}/804-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
+  ${GIT_AM} ${srcdir}/805-gcc-4.4-PR-bootstrap-56258.patch
+  ${GIT_AM} ${srcdir}/806-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
+  ${GIT_AM} ${srcdir}/807-gcc-4.5-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
+}
+
+build() {
+  [[ -d ${srcdir}/build-${MINGW_CHOST} ]] && rm -rf ${srcdir}/build-${MINGW_CHOST}
+  mkdir -p ${srcdir}/build-${MINGW_CHOST} && cd ${srcdir}/build-${MINGW_CHOST}
+
+  local -a configure_opts
+
+  # gcc 4.5 may have issues doing these link options
+  LDFLAGS=${LDFLAGS/,--dynamicbase}
+  LDFLAGS=${LDFLAGS/,--nxcompat}
+  LDFLAGS=${LDFLAGS/,--high-entropy-va}
+
+  LDFLAGS+=" -Wl,--disable-runtime-pseudo-reloc" # maybe try this linker option
+
+  echo "LDFLAGS := $LDFLAGS"
+
+  CFLAGS+=" -fno-stack-check -fno-stack-protector -mno-stack-arg-probe"
+
+  echo "CFLAGS := $CFLAGS"
+
+  local _gcc_driver_version=`eval "cat ${srcdir}/${_sourcedir}/gcc/BASE-VER"`
+
+  case "${CARCH}" in
+    i686)
+      configure_opts+=("--enable-sjlj-exceptions")
+      configure_opts+=("--without-dwarf2")
+      LDFLAGS+=" -Wl,--large-address-aware"
+      local _arch=i686
+    ;;
+
+    x86_64)
+      configure_opts+=("--enable-sjlj-exceptions")
+      configure_opts+=("--without-dwarf2")
+      configure_opts+=("--enable-64bit")
+      local _arch=x86-64
+    ;;
+  esac
+
+  if check_option "debug" "n"; then
+    configure_opts+=("--disable-libstdcxx-debug")
+  else
+    configure_opts+=("--enable-libstdcxx-debug")
+  fi
+
+  if [ "$_enable_3_stages" == "no" ]; then
+    configure_opts+=("--disable-bootstrap")
+  elif [ "$_enable_3_stages" == "yes" ]; then
+    configure_opts+=("--enable-bootstrap")
+  fi
+
+  if [ "$_enable_graphite" == "yes" ]; then
+    configure_opts+=("--enable-graphite")
+  else
+    configure_opts+=("--disable-graphite")
+    configure_opts+=("--without-cloog")
+    configure_opts+=("--without-isl")
+  fi
+
+  if [ "$_enable_threads" == "yes" ]; then
+    configure_opts+=("--enable-threads=${_threads}")
+  elif [ "$_enable_threads" == "no" ]; then
+    configure_opts+=("--disable-threads")
+  fi
+
+  if [ "$_enable_libgomp" == "yes" ]; then
+    configure_opts+=("--enable-libgomp")
+  elif [ "$_enable_libgomp" == "no" ]; then
+    configure_opts+=("--disable-libgomp")
+  fi
+
+  local _languages="c"
+  if [ "$_enable_ada" == "yes" ]; then
+    _languages+=",ada"
+    configure_opts+=("--enable-gnattools")
+  fi
+  if [ "$_enable_cxx" == "yes" ]; then
+    _languages+=",c++"
+  else
+    configure_opts+=("--disable-build-poststage1-with-cxx")
+    configure_opts+=("--disable-build-with-cxx")
+  fi
+  if [ "$_enable_fortran" == "yes" ]; then
+    _languages+=",fortran"
+  fi
+  if [ "$_enable_objc" == "yes" ]; then
+    _languages+=",objc,obj-c++"
+  fi
+
+  export PATH=${_install_prefix}/bin:$PATH
+
+  echo "PATH := $PATH"
+
+  pacman -Q ${OPT_PACKAGE_MINGW_PREFIX}-crt
+  gcc --version
+  ld  --version
+  if [ "$_enable_ada" == "yes" ]; then
+    gnatbind  --version
+  fi
+
+  ../${_sourcedir}/configure \
+    --with-build-time-tools=${_install_prefix}/bin \
+    --program-suffix=${_gcc_suffix} \
+    --prefix=${_install_prefix} \
+    --with-local-prefix=${_install_prefix}/local \
+    --build=${MINGW_CHOST} \
+    --host=${MINGW_CHOST} \
+    --target=${MINGW_CHOST} \
+    --with-native-system-header-dir=${_install_prefix}/${MINGW_CHOST}/include \
+    --libexecdir=${_install_prefix}/lib \
+    --with-gxx-include-dir=${_install_prefix}/include/c++/${_gcc_driver_version} \
+    --enable-checking=release \
+    --with-arch=${_arch} \
+    --with-tune=generic \
+    --enable-languages=${_languages} \
+    --enable-shared --enable-static \
+    --enable-libatomic \
+    --enable-fully-dynamic-string \
+    --enable-libstdcxx-time=yes \
+    --disable-libstdcxx-pch \
+    --enable-version-specific-runtime-libs \
+    --disable-lto \
+    --disable-multilib \
+    --disable-rpath \
+    --disable-win32-registry \
+    --disable-nls \
+    --disable-werror \
+    --disable-symvers \
+    --with-libiconv=${_install_prefix} \
+    --with-zlib=${_install_prefix} \
+    --with-pkgversion="Rev${pkgrel}, Built by TimS opt-MINGW-packages project" \
+    --with-bugurl="https://github.com/stahta01/opt-MINGW-packages/issues" \
+    --with-gnu-as --with-gnu-ld \
+    "${configure_opts[@]}"
+
+  make -j1 all
+
+  rm -rf ${srcdir}${_install_prefix}
+
+  make -j1 DESTDIR=${srcdir} install
+  if [[ "$_enable_ada" == "yes" && "$_enable_shared" == "yes" ]]; then
+    mv ${srcdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/adalib/*.dll ${srcdir}${_install_prefix}/bin/
+  fi
+}
+
+package_opt-mingw-gcc-libs() {
+  pkgdesc="GNU Compiler Collection (libraries) for (mingw-w64)"
+  depends=()
+  if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
+    depends+=("${OPT_PACKAGE_MINGW_PREFIX}-libwinpthread")
+  fi
+  provides=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-libs" "${OPT_PACKAGE_MINGW_PREFIX}-libssp")
+  conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-libs")
+
+  mkdir -p ${pkgdir}${_install_prefix}/bin
+
+  cd ${srcdir}${_install_prefix}
+  cp bin/libgcc*.dll ${pkgdir}${_install_prefix}/bin/
+  cp bin/libssp*.dll ${pkgdir}${_install_prefix}/bin/
+#  cp lib/gcc/${MINGW_CHOST}/bin/libssp*.dll ${pkgdir}${_install_prefix}/bin/
+  if [ "$_enable_cxx" == "yes" ]; then
+    cp bin/libstdc*.dll ${pkgdir}${_install_prefix}/bin/
+  fi
+  if [ "$_enable_libgomp" == "yes" ]; then
+    cp bin/libgomp*.dll ${pkgdir}${_install_prefix}/bin/
+  fi
+}
+
+package_opt-mingw-gcc() {
+  pkgdesc="GNU Compiler Collection (C,C++,OpenMP) for (mingw-w64)"
+  depends=(
+    "${OPT_PACKAGE_MINGW_PREFIX}-binutils"
+    "${OPT_PACKAGE_MINGW_PREFIX}-zlib"
+    "${OPT_PACKAGE_MINGW_PREFIX}-crt"
+    "${OPT_PACKAGE_MINGW_PREFIX}-headers"
+    "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs=${pkgver}-${pkgrel}"
+  )
+  if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
+    depends+=("${OPT_PACKAGE_MINGW_PREFIX}-winpthreads")
+  fi
+  provides=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-base")
+  conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-base" "${OPT_PACKAGE_MINGW_PREFIX}-${_basename}")
+
+  local _gcc_driver_version=`eval "cat ${srcdir}/${_sourcedir}/gcc/BASE-VER"`
+
+  case "${CARCH}" in
+    i686)
+      local _lib_folders=lib32
+    ;;
+ 
+    x86_64)
+      local _lib_folders=lib64
+    ;;
+  esac
+
+  mkdir -p ${pkgdir}${_install_prefix}/{bin,include,lib,share}
+
+  cd ${srcdir}${_install_prefix}
+  cp bin/cpp.exe ${pkgdir}${_install_prefix}/bin/
+  cp bin/gcc.exe ${pkgdir}${_install_prefix}/bin/
+  cp bin/gcov.exe ${pkgdir}${_install_prefix}/bin/
+  if [ "$_enable_cxx" == "yes" ]; then
+    cp bin/c++.exe ${pkgdir}${_install_prefix}/bin/
+    cp bin/g++.exe ${pkgdir}${_install_prefix}/bin/
+    cp bin/${MINGW_CHOST}-c++.exe ${pkgdir}${_install_prefix}/bin/
+    cp bin/${MINGW_CHOST}-g++.exe ${pkgdir}${_install_prefix}/bin/
+  fi
+  cp bin/${MINGW_CHOST}-gcc-${_gcc_driver_version}.exe ${pkgdir}${_install_prefix}/bin/
+  cp bin/${MINGW_CHOST}-gcc.exe ${pkgdir}${_install_prefix}/bin/
+
+  mkdir -p ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/include
+  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/include/*.h           ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/include/
+  cp -r lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/include/ssp        ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/include/
+  cp -r lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/include-fixed      ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  cp -r lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/install-tools      ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/cc1.exe               ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/collect2.exe          ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/crt*.o                ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/libgcc*               ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/libgcov.*             ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  if [ "$_enable_libgomp" == "yes" ]; then
+    cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/libgomp.*           ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  fi
+  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/libssp*               ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+#  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/lto*.exe              ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+
+  cp ${srcdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_lib_folders}/libgcc_s.a ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+
+  if [ "$_enable_cxx" == "yes" ]; then
+    cp -r include/c++ ${pkgdir}${_install_prefix}/include/
+    cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/cc1plus.exe         ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+    cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/libstdc++*          ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+    cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/libsupc++*          ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  fi
+
+  if [ "$_enable_cxx" == "yes" ]; then
+    mkdir -p ${pkgdir}${_install_prefix}/share/gcc-${_gcc_driver_version}/python
+    cp -r share/gcc-${_gcc_driver_version}/python/libstdcxx              ${pkgdir}${_install_prefix}/share/gcc-${_gcc_driver_version}/python/
+  fi
+
+  mkdir -p ${pkgdir}${_install_prefix}/share/{doc,info,locale,man}
+  cp share/info/cpp.info*                                   ${pkgdir}${_install_prefix}/share/info/
+  cp share/info/cppinternals.info*                          ${pkgdir}${_install_prefix}/share/info/
+  cp share/info/gcc.info*                                   ${pkgdir}${_install_prefix}/share/info/
+  cp share/info/gccinstall.info*                            ${pkgdir}${_install_prefix}/share/info/
+  cp share/info/gccint.info*                                ${pkgdir}${_install_prefix}/share/info/
+  if [ "$_enable_libgomp" == "yes" ]; then
+    cp share/info/libgomp.info*                             ${pkgdir}${_install_prefix}/share/info/
+  fi
+
+  mkdir -p ${pkgdir}${_install_prefix}/share/man/man1
+  cp share/man/man1/cpp.1*                                  ${pkgdir}${_install_prefix}/share/man/man1/
+  cp share/man/man1/gcc.1*                                  ${pkgdir}${_install_prefix}/share/man/man1/
+  cp share/man/man1/gcov.1*                                 ${pkgdir}${_install_prefix}/share/man/man1/
+  cp share/man/man7/fsf-funding.7*                          ${pkgdir}${_install_prefix}/share/man/man1/
+  cp share/man/man7/gfdl.7*                                 ${pkgdir}${_install_prefix}/share/man/man1/
+  cp share/man/man7/gpl.7*                                  ${pkgdir}${_install_prefix}/share/man/man1/
+  if [ "$_enable_cxx" == "yes" ]; then
+    cp share/man/man1/g++.1*                                ${pkgdir}${_install_prefix}/share/man/man1/
+  fi
+}
+
+package_opt-mingw-gcc-ada() {
+  pkgdesc="GNU Compiler Collection (Ada) for (mingw-w64)"
+  depends=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}=${pkgver}-${pkgrel}")
+
+  local _gcc_driver_version=`eval "cat ${srcdir}/${_sourcedir}/gcc/BASE-VER"`
+
+  mkdir -p ${pkgdir}${_install_prefix}/{bin,lib,share}
+
+  cd ${srcdir}${_install_prefix}
+  cp bin/gnat*.exe ${pkgdir}${_install_prefix}/bin/
+
+  cp bin/{libgnarl*,libgnat*}.dll ${pkgdir}${_install_prefix}/bin/
+
+  mkdir -p ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}
+  cp -r lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/adainclude         ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  cp -r lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/adalib             ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/gnat1.exe             ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+
+  mkdir -p ${pkgdir}${_install_prefix}/share/info
+  cp share/info/gnat-style.info*                            ${pkgdir}${_install_prefix}/share/info/
+  cp share/info/gnat_rm.info*                               ${pkgdir}${_install_prefix}/share/info/
+  cp share/info/gnat_ugn.info*                              ${pkgdir}${_install_prefix}/share/info/
+}
+
+# Wrappers for package functions
+
+# 32-bit wrappers
+package_opt-mingw-i686-gcc4-libs() {
+  package_opt-mingw-gcc-libs
+}
+
+package_opt-mingw-i686-gcc4() {
+  package_opt-mingw-gcc
+}
+
+package_opt-mingw-i686-gcc4-ada() {
+  package_opt-mingw-gcc-ada
+}
+
+# 64-bit wrappers
+package_opt-mingw-x86_64-gcc4-libs() {
+  package_opt-mingw-gcc-libs
+}
+
+package_opt-mingw-x86_64-gcc4() {
+  package_opt-mingw-gcc
+}
+
+package_opt-mingw-x86_64-gcc4-ada() {
+  package_opt-mingw-gcc-ada
+}

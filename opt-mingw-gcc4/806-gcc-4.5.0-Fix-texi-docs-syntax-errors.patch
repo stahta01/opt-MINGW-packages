@@ -1,0 +1,30 @@
+From a00c3a3e3fb2fc08b0af929ccee0d8698c1391a9 Mon Sep 17 00:00:00 2001
+From: Tim Stahlhut <stahta01@gmail.com>
+Date: Sat, 25 Dec 2021 19:24:07 -0500
+Subject: Fix c-tree texi docs syntax errors
+
+---
+ gcc/doc/c-tree.texi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/doc/c-tree.texi b/gcc/doc/c-tree.texi
+index 35498583ccd..7ca87fdb61b 100644
+--- a/gcc/doc/c-tree.texi
++++ b/gcc/doc/c-tree.texi
+@@ -2337,13 +2337,13 @@ generate these expressions anyhow, if it can tell that strictness does
+ not matter.  The type of the operands and that of the result are
+ always of @code{BOOLEAN_TYPE} or @code{INTEGER_TYPE}.
+ 
+-@itemx POINTER_PLUS_EXPR
++@item POINTER_PLUS_EXPR
+ This node represents pointer arithmetic.  The first operand is always
+ a pointer/reference type.  The second operand is always an unsigned
+ integer type compatible with sizetype.  This is the only binary
+ arithmetic operand that can operate on pointer types.
+ 
+-@itemx PLUS_EXPR
++@item PLUS_EXPR
+ @itemx MINUS_EXPR
+ @itemx MULT_EXPR
+ These nodes represent various binary arithmetic operations.
+-- 
