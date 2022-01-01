@@ -1,0 +1,56 @@
+# Maintainer:  Tim Stahlhut <stahta01@gmail.com>
+# Contributor: Alexey Pavlov <alexpux@gmail.com>
+# Contributor: Karlson2k (Evgeny Grin) <k2k@narod.ru>
+
+# Based on https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-mpfr
+
+OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
+_install_prefix="/opt$MINGW_PREFIX"
+
+_realname=mpfr
+pkgbase=opt-mingw-${_realname}
+pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
+pkgver=2.4.2
+pkgrel=1
+pkgdesc="Multiple-precision floating-point library (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw32' 'mingw64')
+license=('LGPL')
+options=('staticlibs')
+depends=("${OPT_PACKAGE_MINGW_PREFIX}-gmp")
+makedepends=('patch'
+            "${OPT_PACKAGE_MINGW_PREFIX}-gmp" 
+            "${MINGW_PACKAGE_PREFIX}-gcc-base" 
+            "${MINGW_PACKAGE_PREFIX}-binutils")
+source=(https://ftp.gnu.org/gnu/mpfr/${_realname}-${pkgver}.tar.xz)
+sha256sums=('d7271bbfbc9ddf387d3919df8318cd7192c67b232919bfa1cb3202d07843da1b')
+
+prepare() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+}
+
+build() {
+  [[ -d build-${MINGW_CHOST} ]] && rm -rf build-${MINGW_CHOST}
+  mkdir -p build-${MINGW_CHOST} && cd build-${MINGW_CHOST}
+
+  ../${_realname}-${pkgver}/configure \
+    --build=${MINGW_CHOST} \
+    --prefix=${_install_prefix} \
+    --enable-static \
+    --disable-shared \
+    --with-gmp=${_install_prefix}
+
+  make
+}
+
+check() {
+  cd "${srcdir}/build-${MINGW_CHOST}"
+  make check
+}
+
+package() {
+  cd "${srcdir}/build-${MINGW_CHOST}"
+  make DESTDIR="${pkgdir}" install
+
+  rm -f ${pkgdir}${_install_prefix}/share/info/dir
+}
