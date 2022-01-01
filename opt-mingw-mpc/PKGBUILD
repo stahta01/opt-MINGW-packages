@@ -1,0 +1,48 @@
+# Maintainer:  Tim Stahlhut <stahta01@gmail.com>
+# Contributor: Alexey Pavlov <alexpux@gmail.com>
+
+# Based on https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-gmp
+
+OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
+_install_prefix="/opt$MINGW_PREFIX"
+
+_realname=mpc
+pkgbase=opt-mingw-${_realname}
+pkgname="${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
+pkgver=0.8.1
+pkgrel=1
+pkgdesc="Multiple precision complex arithmetic library (mingw-w64)"
+url='http://www.multiprecision.org'
+license=('LGPL')
+arch=('any')
+mingw_arch=('mingw32' 'mingw64')
+depends=("${OPT_PACKAGE_MINGW_PREFIX}-mpfr")
+makedepends=("${OPT_PACKAGE_MINGW_PREFIX}-gmp" "${OPT_PACKAGE_MINGW_PREFIX}-mpfr" "${MINGW_PACKAGE_PREFIX}-gcc-base")
+options=('staticlibs' '!emptydirs')
+source=(ftp://gcc.gnu.org/pub/gcc/infrastructure/mpc-${pkgver}.tar.gz)
+sha256sums=('e664603757251fd8a352848276497a4c79b7f8b21fd8aedd5cc0598a38fee3e4')
+
+build() {
+  [[ -d ${srcdir}/build-${MINGW_CHOST} ]] && rm -rf ${srcdir}/build-${MINGW_CHOST}
+  mkdir -p ${srcdir}/build-${MINGW_CHOST} && cd ${srcdir}/build-${MINGW_CHOST}
+  ../${_realname}-${pkgver}/configure \
+     --build=${MINGW_CHOST} \
+    --prefix=${_install_prefix} \
+    --enable-static \
+    --disable-shared \
+    --with-gmp=${_install_prefix} \
+    --with-mpfr=${_install_prefix}
+  make
+}
+
+check() {
+  cd "${srcdir}/build-${MINGW_CHOST}"
+  make check || true
+}
+
+package() {
+  cd "${srcdir}/build-${MINGW_CHOST}"
+  make DESTDIR="${pkgdir}" install
+
+  rm -f ${pkgdir}${_install_prefix}/share/info/dir
+}
