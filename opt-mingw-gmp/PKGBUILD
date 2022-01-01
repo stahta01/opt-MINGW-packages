@@ -1,0 +1,85 @@
+# Maintainer:  Tim Stahlhut <stahta01@gmail.com>
+# Contributor: Alexey Pavlov <alexpux@gmail.com>
+
+# Based on https://github.com/msys2/MINGW-packages/tree/master/mingw-w64-gmp
+
+OPT_PACKAGE_MINGW_PREFIX="opt-mingw-$MSYSTEM_CARCH"
+_install_prefix="/opt$MINGW_PREFIX"
+
+_realname=gmp
+pkgbase=opt-mingw-${_realname}
+pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}")
+pkgver=4.3.2
+pkgrel=1
+pkgdesc="A free library for arbitrary precision arithmetic (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw32' 'mingw64')
+url="https://gmplib.org/"
+license=('LGPL3' 'GPL3')
+makedepends=("${MINGW_PACKAGE_PREFIX}-gcc-base")
+#makedepends=("${MINGW_PACKAGE_PREFIX}-autotools")
+source=(ftp://gcc.gnu.org/pub/gcc/infrastructure/gmp-${pkgver}.tar.bz2)
+options=('staticlibs')
+sha256sums=('936162c0312886c21581002b79932829aa048cfaf9937c6265aeaa14f1cd1775')
+
+#prepare() {
+#  cd "${srcdir}/${_realname}-${pkgver}"
+#  [[ -d ../stash ]] && rm -rf ../stash
+#  mkdir ../stash
+#  cp config.{guess,sub} ../stash
+#  autoreconf -fi
+#  cp -f ../stash/config.{guess,sub} .
+#}
+
+build() {
+  local -a extra_config
+  case "$CARCH" in
+    i?86|x86_64)
+      ;;
+    *)
+      extra_config+=(--disable-assembly)
+      ;;
+  esac
+
+#  export PATH=${_install_prefix}/bin:$PATH
+
+  # Build static version
+  [[ -d ${srcdir}/static-${MINGW_CHOST} ]] && rm -rf ${srcdir}/static-${MINGW_CHOST}
+  mkdir -p "${srcdir}/static-${MINGW_CHOST}" && cd "${srcdir}/static-${MINGW_CHOST}"
+  ../${_realname}-${pkgver}/configure \
+    --build=${MINGW_CHOST} \
+    --prefix=${_install_prefix} \
+    --enable-cxx \
+    "${extra_config[@]}" \
+    --enable-static \
+    --disable-shared
+  make
+
+  # Build shared version
+  [[ -d ${srcdir}/shared-${MINGW_CHOST} ]] && rm -rf ${srcdir}/shared-${MINGW_CHOST}
+  mkdir -p "${srcdir}/shared-${MINGW_CHOST}" && cd "${srcdir}/shared-${MINGW_CHOST}"
+  ../${_realname}-${pkgver}/configure --build=${MINGW_CHOST} \
+    --prefix=${_install_prefix} \
+    --enable-cxx \
+    "${extra_config[@]}" \
+    --disable-static \
+    --enable-shared
+  make
+}
+
+#check() {
+#  cd "${srcdir}/static-${MINGW_CHOST}"
+#  make check
+#}
+
+package() {
+  cd "${srcdir}/static-${MINGW_CHOST}"
+  make DESTDIR="${pkgdir}" install
+
+  cd ${srcdir}/shared-${MINGW_CHOST}
+  mkdir -p ${pkgdir}${_install_prefix}/{bin,lib}
+  cp .libs/libgmp*.dll ${pkgdir}${_install_prefix}/bin/
+  cp .libs/libgmp*.dll.a ${pkgdir}${_install_prefix}/lib/
+
+  rm -f ${pkgdir}${_install_prefix}/share/info/dir
+}
