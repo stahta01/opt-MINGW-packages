@@ -23,5 +23,5 @@ _copy_data_to_repo() {
 
 cd opt-mingw-gcc4 && \
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct -- PKGBUILD) && \
-MINGW_ARCH="mingw32" makepkg-mingw -Lf --install --noconfirm && \
+MINGW_ARCH="mingw32" makepkg-mingw -Lf --holdver --install --noconfirm && \
 _copy_data_to_repo opt-mingw-i686-gcc4 opt-mingw-i686-gcc4-libs
