@@ -1,0 +1,8 @@
+.
+[          0]  ./opt
+[          0]  ./opt/mingw32
+[          0]  ./opt/mingw32/i686-w64-mingw32
+[          0]  ./opt/mingw32/i686-w64-mingw32/lib
+[       1348]  ./opt/mingw32/i686-w64-mingw32/lib/default-manifest.o
+
+4 directories, 1 file

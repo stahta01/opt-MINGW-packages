@@ -1,0 +1,10 @@
+.
+./opt
+./opt/mingw32
+./opt/mingw32/i686-w64-mingw32
+./opt/mingw32/i686-w64-mingw32/include
+./opt/mingw32/i686-w64-mingw32/include/pthread_signal.h
+./opt/mingw32/i686-w64-mingw32/include/pthread_time.h
+./opt/mingw32/i686-w64-mingw32/include/pthread_unistd.h
+
+4 directories, 3 files

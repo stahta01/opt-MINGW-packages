@@ -1,0 +1,23 @@
+.
+./opt
+./opt/mingw64
+./opt/mingw64/bin
+./opt/mingw64/bin/gfortran.exe
+./opt/mingw64/bin/x86_64-w64-mingw32-gfortran.exe
+./opt/mingw64/lib
+./opt/mingw64/lib/gcc
+./opt/mingw64/lib/gcc/x86_64-w64-mingw32
+./opt/mingw64/lib/gcc/x86_64-w64-mingw32/4.6.3
+./opt/mingw64/lib/gcc/x86_64-w64-mingw32/4.6.3/f951.exe
+./opt/mingw64/lib/gcc/x86_64-w64-mingw32/4.6.3/libgfortran.a
+./opt/mingw64/lib/gcc/x86_64-w64-mingw32/4.6.3/libgfortran.dll.a
+./opt/mingw64/lib/gcc/x86_64-w64-mingw32/4.6.3/libgfortran.spec
+./opt/mingw64/lib/gcc/x86_64-w64-mingw32/4.6.3/libgfortranbegin.a
+./opt/mingw64/share
+./opt/mingw64/share/info
+./opt/mingw64/share/info/gfortran.info
+./opt/mingw64/share/man
+./opt/mingw64/share/man/man1
+./opt/mingw64/share/man/man1/gfortran.1
+
+11 directories, 9 files

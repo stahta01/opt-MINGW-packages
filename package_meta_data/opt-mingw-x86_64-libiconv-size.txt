@@ -1,0 +1,41 @@
+.
+[          0]  ./opt
+[          0]  ./opt/mingw64
+[          0]  ./opt/mingw64/bin
+[      46401]  ./opt/mingw64/bin/libcharset-1.dll
+[    1064423]  ./opt/mingw64/bin/libiconv-2.dll
+[          0]  ./opt/mingw64/include
+[       9271]  ./opt/mingw64/include/iconv.h
+[       1513]  ./opt/mingw64/include/libcharset.h
+[       6059]  ./opt/mingw64/include/localcharset.h
+[          0]  ./opt/mingw64/lib
+[       2860]  ./opt/mingw64/lib/libcharset.a
+[       2180]  ./opt/mingw64/lib/libcharset.dll.a
+[    1088038]  ./opt/mingw64/lib/libiconv.a
+[       9602]  ./opt/mingw64/lib/libiconv.dll.a
+[          0]  ./opt/mingw64/lib/pkgconfig
+[        239]  ./opt/mingw64/lib/pkgconfig/iconv.pc
+[          0]  ./opt/mingw64/share
+[          0]  ./opt/mingw64/share/doc
+[          0]  ./opt/mingw64/share/doc/libiconv
+[       6335]  ./opt/mingw64/share/doc/libiconv/iconv.3.html
+[       2054]  ./opt/mingw64/share/doc/libiconv/iconv_close.3.html
+[       8489]  ./opt/mingw64/share/doc/libiconv/iconv_open.3.html
+[       3406]  ./opt/mingw64/share/doc/libiconv/iconv_open_into.3.html
+[       4399]  ./opt/mingw64/share/doc/libiconv/iconvctl.3.html
+[          0]  ./opt/mingw64/share/licenses
+[          0]  ./opt/mingw64/share/licenses/libiconv
+[      35147]  ./opt/mingw64/share/licenses/libiconv/COPYING
+[      25291]  ./opt/mingw64/share/licenses/libiconv/COPYING.LIB
+[       4993]  ./opt/mingw64/share/licenses/libiconv/README
+[          0]  ./opt/mingw64/share/licenses/libiconv/libcharset
+[      25291]  ./opt/mingw64/share/licenses/libiconv/libcharset/COPYING.LIB
+[          0]  ./opt/mingw64/share/man
+[          0]  ./opt/mingw64/share/man/man3
+[       4239]  ./opt/mingw64/share/man/man3/iconv.3
+[       1044]  ./opt/mingw64/share/man/man3/iconv_close.3
+[       4671]  ./opt/mingw64/share/man/man3/iconv_open.3
+[       1822]  ./opt/mingw64/share/man/man3/iconv_open_into.3
+[       2385]  ./opt/mingw64/share/man/man3/iconvctl.3
+
+14 directories, 24 files

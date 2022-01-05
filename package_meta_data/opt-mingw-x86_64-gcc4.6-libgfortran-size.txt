@@ -1,0 +1,7 @@
+.
+[          0]  ./opt
+[          0]  ./opt/mingw64
+[          0]  ./opt/mingw64/bin
+[    1325115]  ./opt/mingw64/bin/libgfortran-3.dll
+
+3 directories, 1 file

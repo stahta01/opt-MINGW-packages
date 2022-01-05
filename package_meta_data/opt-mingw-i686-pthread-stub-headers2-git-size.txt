@@ -1,0 +1,9 @@
+.
+[          0]  ./opt
+[          0]  ./opt/mingw32
+[          0]  ./opt/mingw32/i686-w64-mingw32
+[          0]  ./opt/mingw32/i686-w64-mingw32/include
+[         81]  ./opt/mingw32/i686-w64-mingw32/include/pthread_time.h
+[         81]  ./opt/mingw32/i686-w64-mingw32/include/pthread_unistd.h
+
+4 directories, 2 files

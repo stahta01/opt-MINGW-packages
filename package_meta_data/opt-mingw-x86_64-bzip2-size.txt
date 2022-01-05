@@ -1,0 +1,39 @@
+.
+[          0]  ./opt
+[          0]  ./opt/mingw64
+[          0]  ./opt/mingw64/bin
+[      47692]  ./opt/mingw64/bin/bunzip2.exe
+[      47692]  ./opt/mingw64/bin/bzcat.exe
+[       2140]  ./opt/mingw64/bin/bzcmp
+[       2140]  ./opt/mingw64/bin/bzdiff
+[       2054]  ./opt/mingw64/bin/bzegrep
+[       2054]  ./opt/mingw64/bin/bzfgrep
+[       2054]  ./opt/mingw64/bin/bzgrep
+[      47692]  ./opt/mingw64/bin/bzip2.exe
+[      24667]  ./opt/mingw64/bin/bzip2recover.exe
+[       1297]  ./opt/mingw64/bin/bzless
+[       1297]  ./opt/mingw64/bin/bzmore
+[      73265]  ./opt/mingw64/bin/libbz2-1.dll
+[          0]  ./opt/mingw64/include
+[       7187]  ./opt/mingw64/include/bzlib.h
+[          0]  ./opt/mingw64/lib
+[      65572]  ./opt/mingw64/lib/libbz2.a
+[      22586]  ./opt/mingw64/lib/libbz2.dll.a
+[          0]  ./opt/mingw64/lib/pkgconfig
+[        253]  ./opt/mingw64/lib/pkgconfig/bzip2.pc
+[          0]  ./opt/mingw64/share
+[          0]  ./opt/mingw64/share/licenses
+[          0]  ./opt/mingw64/share/licenses/bzip2
+[       1896]  ./opt/mingw64/share/licenses/bzip2/LICENSE
+[          0]  ./opt/mingw64/share/man
+[          0]  ./opt/mingw64/share/man/man1
+[         18]  ./opt/mingw64/share/man/man1/bzcmp.1
+[        897]  ./opt/mingw64/share/man/man1/bzdiff.1
+[         18]  ./opt/mingw64/share/man/man1/bzegrep.1
+[         18]  ./opt/mingw64/share/man/man1/bzfgrep.1
+[       1297]  ./opt/mingw64/share/man/man1/bzgrep.1
+[      16412]  ./opt/mingw64/share/man/man1/bzip2.1
+[         18]  ./opt/mingw64/share/man/man1/bzless.1
+[       4310]  ./opt/mingw64/share/man/man1/bzmore.1
+
+11 directories, 25 files

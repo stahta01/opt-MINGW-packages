@@ -1,0 +1,8 @@
+.
+./opt
+./opt/mingw32
+./opt/mingw32/bin
+./opt/mingw32/bin/libgcc_s_sjlj-1.dll
+./opt/mingw32/bin/libssp-0.dll
+
+3 directories, 2 files

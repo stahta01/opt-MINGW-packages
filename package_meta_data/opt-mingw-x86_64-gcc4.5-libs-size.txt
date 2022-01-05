@@ -1,0 +1,8 @@
+.
+[          0]  ./opt
+[          0]  ./opt/mingw64
+[          0]  ./opt/mingw64/bin
+[      79994]  ./opt/mingw64/bin/libgcc_s_sjlj-1.dll
+[      19095]  ./opt/mingw64/bin/libssp-0.dll
+
+3 directories, 2 files

@@ -1,0 +1,10 @@
+.
+./opt
+./opt/mingw64
+./opt/mingw64/x86_64-w64-mingw32
+./opt/mingw64/x86_64-w64-mingw32/include
+./opt/mingw64/x86_64-w64-mingw32/include/pthread_signal.h
+./opt/mingw64/x86_64-w64-mingw32/include/pthread_time.h
+./opt/mingw64/x86_64-w64-mingw32/include/pthread_unistd.h
+
+4 directories, 3 files

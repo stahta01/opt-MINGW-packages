@@ -1,0 +1,22 @@
+.
+[          0]  ./opt
+[          0]  ./opt/mingw64
+[          0]  ./opt/mingw64/bin
+[      92726]  ./opt/mingw64/bin/zlib1.dll
+[          0]  ./opt/mingw64/include
+[      16316]  ./opt/mingw64/include/zconf.h
+[      96239]  ./opt/mingw64/include/zlib.h
+[          0]  ./opt/mingw64/lib
+[      96658]  ./opt/mingw64/lib/libz.a
+[      61122]  ./opt/mingw64/lib/libz.dll.a
+[          0]  ./opt/mingw64/lib/pkgconfig
+[        252]  ./opt/mingw64/lib/pkgconfig/zlib.pc
+[          0]  ./opt/mingw64/share
+[          0]  ./opt/mingw64/share/licenses
+[          0]  ./opt/mingw64/share/licenses/zlib
+[       1215]  ./opt/mingw64/share/licenses/zlib/LICENSE
+[          0]  ./opt/mingw64/share/man
+[          0]  ./opt/mingw64/share/man/man3
+[       4477]  ./opt/mingw64/share/man/man3/zlib.3
+
+11 directories, 8 files
