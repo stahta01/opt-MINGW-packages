@@ -179,8 +179,8 @@
 [       9016]  ./opt/mingw32/i686-w64-mingw32/lib/libmfcuia32.a
 [      98956]  ./opt/mingw32/i686-w64-mingw32/lib/libmfplat.a
 [       8920]  ./opt/mingw32/i686-w64-mingw32/lib/libmgmtapi.a
-[      29410]  ./opt/mingw32/i686-w64-mingw32/lib/libmingw32.a
-[     524760]  ./opt/mingw32/i686-w64-mingw32/lib/libmingwex.a
+[      30094]  ./opt/mingw32/i686-w64-mingw32/lib/libmingw32.a
+[     525274]  ./opt/mingw32/i686-w64-mingw32/lib/libmingwex.a
 [        572]  ./opt/mingw32/i686-w64-mingw32/lib/libmingwthrd.a
 [      79114]  ./opt/mingw32/i686-w64-mingw32/lib/libmoldname.a
 [      55284]  ./opt/mingw32/i686-w64-mingw32/lib/libmpr.a

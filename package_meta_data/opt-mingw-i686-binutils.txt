@@ -50,7 +50,8 @@
 ./opt/mingw32/include/symcat.h
 ./opt/mingw32/lib
 ./opt/mingw32/lib/libbfd.a
-./opt/mingw32/lib/libiberty.a
 ./opt/mingw32/lib/libopcodes.a
+./opt/mingw32/lib32
+./opt/mingw32/lib32/libiberty.a
 
-9 directories, 44 files
+10 directories, 44 files
