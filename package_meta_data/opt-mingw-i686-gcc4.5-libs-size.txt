@@ -3,6 +3,6 @@
 [          0]  ./opt/mingw32
 [          0]  ./opt/mingw32/bin
 [      94781]  ./opt/mingw32/bin/libgcc_s_sjlj-1.dll
-[      15945]  ./opt/mingw32/bin/libssp-0.dll
+[      15912]  ./opt/mingw32/bin/libssp-0.dll
 
 3 directories, 2 files
