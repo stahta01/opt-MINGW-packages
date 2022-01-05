@@ -4,5 +4,6 @@
 ./opt/mingw32/bin
 ./opt/mingw32/bin/libgcc_s_sjlj-1.dll
 ./opt/mingw32/bin/libssp-0.dll
+./opt/mingw32/bin/libstdc++-6.dll
 
-3 directories, 2 files
+3 directories, 3 files
