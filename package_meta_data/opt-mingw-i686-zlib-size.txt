@@ -2,12 +2,12 @@
 [          0]  ./opt
 [          0]  ./opt/mingw32
 [          0]  ./opt/mingw32/bin
-[      85138]  ./opt/mingw32/bin/zlib1.dll
+[      85650]  ./opt/mingw32/bin/zlib1.dll
 [          0]  ./opt/mingw32/include
 [      16316]  ./opt/mingw32/include/zconf.h
 [      96239]  ./opt/mingw32/include/zlib.h
 [          0]  ./opt/mingw32/lib
-[      86220]  ./opt/mingw32/lib/libz.a
+[      86806]  ./opt/mingw32/lib/libz.a
 [      62716]  ./opt/mingw32/lib/libz.dll.a
 [          0]  ./opt/mingw32/lib/pkgconfig
 [        252]  ./opt/mingw32/lib/pkgconfig/zlib.pc
