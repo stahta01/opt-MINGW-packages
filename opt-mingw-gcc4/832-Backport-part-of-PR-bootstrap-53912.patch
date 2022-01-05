@@ -1,0 +1,101 @@
+From 262d8df24a044ebd5e6a380c5d9b174ef6b74f2e Mon Sep 17 00:00:00 2001
+From: Kai Tietz <ktietz@redhat.com>
+Date: Thu, 29 Nov 2012 19:40:27 +0100
+Subject: Backport part of PR bootstrap/53912
+
+Patch file edited by Tim S.
+
+SVNs 193946, 194067, 194070, 194072, and 194348 from mainline.
+
+PR bootstrap/53912 (bootstrap fails using default c++ mode in stage 2 and 3 for native x86_64-w64-mingw32)
+
+	* prefix.c (lookup_key): Replace xmalloc/xrealloc use by XNEWVEC/XRESIZEVEC.
+
+	* pointer-set.c (hash1): Cast from pointer via uintptr_t.
+
+	* tree-dump.c (dump_pointer): Print pointer via HOST_WIDE_INT_PRINT.
+
+	* ggc-common.c (POINTER_HASH): Cast from pointer via intptr_t.
+
+	* print-tree.c (print_node): Cast from pointer via uintptr_t.
+---
+ gcc/ggc-common.c  | 2 +-
+ gcc/pointer-set.c | 2 +-
+ gcc/prefix.c      | 4 ++--
+ gcc/print-tree.c  | 2 +-
+ gcc/tree-dump.c   | 3 ++-
+ 5 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/gcc/ggc-common.c b/gcc/ggc-common.c
+index 3ff64ffdd7d..f0a4d81c785 100644
+--- a/gcc/ggc-common.c
++++ b/gcc/ggc-common.c
+@@ -308,7 +308,7 @@ struct ptr_data
+   enum gt_types_enum type;
+ };
+ 
+-#define POINTER_HASH(x) (hashval_t)((long)x >> 3)
++#define POINTER_HASH(x) (hashval_t)((intptr_t)x >> 3)
+ 
+ /* Register an object in the hash table.  */
+ 
+diff --git a/gcc/pointer-set.c b/gcc/pointer-set.c
+index b57c404f6a1..ebad5dbf5b3 100644
+--- a/gcc/pointer-set.c
++++ b/gcc/pointer-set.c
+@@ -64,7 +64,7 @@ hash1 (const void *p, unsigned long max, unsigned long logmax)
+ #endif
+   const unsigned long shift = HOST_BITS_PER_LONG - logmax;
+ 
+-  return ((A * (unsigned long) p) >> shift) & (max - 1);
++  return ((A * (uintptr_t) p) >> shift) & (max - 1);
+ }
+ 
+ /* Allocate an empty pointer set.  */
+diff --git a/gcc/prefix.c b/gcc/prefix.c
+index c72203c2221..ababf1bb9cf 100644
+--- a/gcc/prefix.c
++++ b/gcc/prefix.c
+@@ -158,12 +158,12 @@ lookup_key (char *key)
+     }
+ 
+   size = 32;
+-  dst = xmalloc (size);
++  dst = XNEWVEC (char, size);
+ 
+   res = RegQueryValueExA (reg_key, key, 0, &type, (LPBYTE) dst, &size);
+   if (res == ERROR_MORE_DATA && type == REG_SZ)
+     {
+-      dst = xrealloc (dst, size);
++      dst = XRESIZEVEC (char, dst, size);
+       res = RegQueryValueExA (reg_key, key, 0, &type, (LPBYTE) dst, &size);
+     }
+ 
+diff --git a/gcc/print-tree.c b/gcc/print-tree.c
+index dfd358974c7..5383c5a7230 100644
+--- a/gcc/print-tree.c
++++ b/gcc/print-tree.c
+@@ -255,7 +255,7 @@ print_node (FILE *file, const char *prefix, tree node, int indent)
+   /* Allow this function to be called if the table is not there.  */
+   if (table)
+     {
+-      hash = ((unsigned long) node) % HASH_SIZE;
++      hash = ((uintptr_t) node) % HASH_SIZE;
+ 
+       /* If node is in the table, just mention its address.  */
+       for (b = table[hash]; b; b = b->next)
+diff --git a/gcc/tree-dump.c b/gcc/tree-dump.c
+index e5fce0e1622..4db6d148467 100644
+--- a/gcc/tree-dump.c
++++ b/gcc/tree-dump.c
+@@ -168,7 +168,8 @@ void
+ dump_pointer (dump_info_p di, const char *field, void *ptr)
+ {
+   dump_maybe_newline (di);
+-  fprintf (di->stream, "%-4s: %-8lx ", field, (unsigned long) ptr);
++  fprintf (di->stream, "%-4s: %-8" HOST_WIDE_INT_PRINT "x ", field,
++	   (unsigned HOST_WIDE_INT) (uintptr_t) ptr);
+   di->column += 15;
+ }
+ 
+-- 

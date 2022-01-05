@@ -14,9 +14,10 @@ _install_prefix="/opt$MINGW_PREFIX"
 _enable_ada=no
 _enable_cxx=no
 
-_enable_shared=yes   # more code guards needs added
+_enable_intree_gmp_etc=yes  # No needs work
+_enable_shared=no
 _enable_3_stages=no
-_enable_graphite=no  # yes is broken
+_enable_graphite=no         # yes is broken
 _enable_threads=yes
 _threads="win32"
 if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
@@ -30,10 +31,10 @@ _realname=${_basename}4
 _gcc_suffix=""
 pkgbase=opt-mingw-${_realname}
 pkgname=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}"
-         "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs"
+         $([[ "$_enable_shared" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs")
          $([[ "$_enable_ada" == "yes" ]] && echo "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-ada")
         )
-pkgver=4.5.4.d20120702+42.c10.g41eccc86828
+pkgver=4.5.4.d20120702+42.c11.g41eccc86828
 pkgrel=1
 pkgdesc="GCC 4 git for (mingw-w64)"
 arch=('any')
@@ -51,37 +52,79 @@ makedepends=('lndir' 'make' 'patch' 'bison' 'flex' 'tar' 'diffutils'
              "${OPT_PACKAGE_MINGW_PREFIX}-crt"
              "${OPT_PACKAGE_MINGW_PREFIX}-headers"
              "${OPT_PACKAGE_MINGW_PREFIX}-windows-default-manifest")
+if [[ "$_enable_intree_gmp_etc" != "yes" ]]; then
+  makedepends+=("${OPT_PACKAGE_MINGW_PREFIX}-mpc")
+fi
 if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
   makedepends+=("${OPT_PACKAGE_MINGW_PREFIX}-winpthreads")
 fi
 checkdepends=('dejagnu')
 optdepends=()
 options=('!debug' 'staticlibs' '!emptydirs' '!buildflags')
- _git_branch=releases/gcc-4.5                                         # CRT1 builds; GCC building 1st time
+#_git_branch=releases/gcc-4.9                         # SVN: r??????  # end   4.9.?
+#_git_branch=releases/gcc-4.8                         # SVN: r??????  # end   4.8.?
+#_git_branch=releases/gcc-4.7                         # SVN: r??????  # end   4.7.?
+#_git_branch=releases/gcc-4.6                         # SVN: r??????  # end   4.6.?
+#_git_commit=d3bccded30236d16e477a7bbd79aff51724234b0 # SVN: r157990  # start 4.6.0
+ _git_branch=releases/gcc-4.5                         # SVN: r189152  # end   4.5.4   Builds and runs okay
 #_git_commit=310b8e53fe588696b2ecafdbb4e9404eeca88257 # SVN: r173115  # start 4.5.4
+#_git_commit=ffd3d5cd62c1808a3705e05b697220f273e49d0b # SVN: r173113  # end   4.5.3
 #_git_commit=637279192ef0678b8ea001074d25bb5067c6d8ce # SVN: r167948  # start 4.5.3
+#_git_commit=ef132e31f53f6d58a36ed7e1bdfd66bed70f7455 # SVN: r167945  # end   4.5.2
 #_git_commit=ddd656934e095b1d15915aa307ed45a77887df22 # SVN: r162777  # start 4.5.2
-#_git_commit=119fc32422d1394a331ff722f2744d85473b7d80 # SVN: r158342  # start 4.5.1
-#_git_commit=2f77df704ff54372859661815055b84056a75e41 # SVN: r158338  # CRT1 builds <---- 1
-#_git_commit=06ae20223412c95fe31aa29748ac53449532f6e1 # SVN: r151542  # CRT1 builds <---- 2
-#_git_commit=3845b0a0765476d137e0a87f8ece4d9483be3628 # SVN: r150139  # 2804 CRT1 needs built; GCC Build failed
-#_git_commit=98b50196d1df6804035208d8ea37b3c80e95448e # SVN: r150103  # CRT1 builds; GCC built okay except it seems to be missing DLLs
-#_git_commit=05b5c4e8742e5deba247f5a68eec43b13e88ce8c # SVN: r150072  # 2760 <---- 3
-#_git_commit=56131eb5a0492df3fd6421db599ed6f3b42545c6 # SVN: r149307  # CRT1 builds; GCC built okay; but, cannot build GCC mpc configure: error: libgmp not found or uses a different ABI.
-#_git_commit=e2e23550fca10255ad0251e10c53fbeecc8bc057 # SVN: r149268  # 2356
-#_git_commit=bf15d4697d6d4605699730e286f822ed27ff180d # SVN: r149246  # 2352
-#_git_commit=07302a1bb6c0842e0bf214ec7d551a99c76efa8f # SVN: r149216  # 2335
-#_git_commit=f0e410bca1566df48d5a8e5099271c9caf1fb5c9 # SVN: r149204  # 2327 <---- 4
-#_git_commit=b0f0c817838b52f1c5a769d6a6b38be9669e7988 # SVN: r149162  # 2310
-#_git_commit=429a907c9aad98f4cee72a79ec9c50c3d5fde320 # SVN: r149126  # 2288
-#_git_commit=15ab11cb467e45ef04da8c8521db0e80e83bfaad # SVN: r149073  # 2255 GCC mpc configure: error: libgmp not found or uses a different ABI.
-#_git_commit=152413f7edcf11d34026246569f5145d414f1653 # SVN: r149043  # 2238 GCC mpc configure: error: libgmp not found or uses a different ABI.
-#_git_commit=9218bba42b6f57d8eb5ade01fd0c0fda9a57d3b2 # SVN: r148958  # GCC mpc configure: error: libgmp not found or uses a different ABI.
-#_git_commit=6ae467eadc27db1267c9793a9b2f632ecb156bad # SVN: r148925  # 2164
-#_git_commit=cdfcf5f9c0d86170d56f798bc00df57e446c386c # SVN: r148640  # Error building shared libgcc
-                                                                      # 09xx
-#_git_commit=a143dc135e37cef5f228e79a4b0acadacf83e6e6 # SVN: r145125  # CRT1 needs built
-#_git_commit=e54d52a8fb13d13b5ec27ef02617f053267d13b9 # SVN: r145124  # start 4.5.0
+#_git_commit=88c1e55bd1f3e94e892aba390adf21a4ec5a2686 # SVN: r162773  # end   4.5.1   ?Builds and runs okay
+#_git_commit=119fc32422d1394a331ff722f2744d85473b7d80 # SVN: r158342  # start 4.5.1   ?Builds and runs okay
+#_git_commit=2f77df704ff54372859661815055b84056a75e41 # SVN: r158338  # end   4.5.0   Builds and runs okay
+#_git_commit=a7796c74f683525052ebe604d339bfdad99d6231 # SVN: r150035  #  9025         ???
+#_git_commit=6ae467eadc27db1267c9793a9b2f632ecb156bad # SVN: r148925  #  8449         configure: error: C compiler cannot create executables
+#_git_commit=3be639f7468517f519a91a618ca0cf40ba76ba74 # SVN: r148919  #  8448         configure: error: C compiler cannot create executables
+#_git_commit=70b28664eecba0763db09b28b6a81f38f9cec1d8 # SVN: r148917  #  8447         configure: error: C compiler cannot create executables
+#_git_commit=2b426674815acc4d32ef39140e531f92cbf20e14 # SVN: r148903  #  8437         configure: error: C compiler cannot create executables
+#_git_commit=00020c1638f4b23d9889cad741ef40b4997775bf # SVN: r148889  #  8425         configure: error: C compiler cannot create executables
+#_git_commit=9006a1617947532ece5e1db63f5fa9199dc747c2 # SVN: r148888  #  8424       REDO Builds and 2nd GCC mpc configure: error: libmpfr not found or uses a different ABI.
+#_git_commit=3259554a05a0c61919653257c71c741e57913fb6 # SVN: r148883  #  8422         mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=73267076729bcff9502fdc86f6341de157395af5 # SVN: r148877  #  8420         mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=792569a94a163072c0da7c5aaa53a3a31c649888 # SVN: r148847  #  8407         mpc configure: error: libmpfr not found or uses a different ABI.
+#_git_commit=0bbf2ffa83ec25d7983de6ad4012d86c94e383d2 # SVN: r148841  #  8401         mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=abe19d88066a6afdaf8c6917a631d21e30e4091c # SVN: r148835  #  8395       Next23
+#_git_commit=a0c579997dc4771c9a7a5acb556d8057bff84a7d # SVN: r148825  #  8388         mpfr configure: error: gmp.h can't be found, or is unusable.
+#_git_commit=e9402aab8a080c1a14e7a4c6f942d6794735e6b0 # SVN: r148774  #  8349         mpfr configure: error: gmp.h can't be found, or is unusable.
+#_git_commit=47ff3434c752e46ca002d4d420b1d47b1762f119 # SVN: r148737  #  8323         mpc  configure: error: libgmp not found or uses a different ABI.
+#_git_commit=ada506eaec8151e9dffda4cf5b5ea34d87bd8e23 # SVN: r148688  #  8292         Builds and ???
+#_git_commit=b6680d727147ab31aa2248f2ba355b501d26cae2 # SVN: r148665  #  8287       Next25
+#_git_commit=d9dd51dc46dd3edf0f217c4fc1f049800312d8f7 # SVN: r148655  #  8280         mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=c637b0fa0df8a3e7b03ccf7da8a6ad249b232d59 # SVN: r148651  #  8276       Next24
+#_git_commit=cdfcf5f9c0d86170d56f798bc00df57e446c386c # SVN: r148640  #  8270       REDO  Error building shared libgcc undefined reference to `__addtf3'
+#_git_commit=8288224021dddd4da854b43a046b1ce6851a3893 # SVN: r148621  #  8260         mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=54c4ebb7a524b52febe148e226bf5bc94d8832ae # SVN: r148565  #  8248         Error building shared libgcc undefined reference to `__addtf3'
+#_git_commit=1d6b0cb977867d02ca157620f2b440dc5faf7d65 # SVN: r148480  #  8197       Next26
+#_git_commit=eb2969d5e6ecbcd9de53cb210bc03bf089ff6636 # SVN: r148361  #  8148         mpc configure: error: libmpfr not found or uses a different ABI.
+#_git_commit=5f4a82c0c51befe5a6a4eae3e371cdeec85a7dd6 # SVN: r148280  #  8100         mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=712b30cf6f380ea918f78d4ec208093df3566982 # SVN: r148241  #  8071       Next32
+#_git_commit=faef1e6d29245f7ab50c45d52a127e29aac6f208 # SVN: r148196  #  8049         mpfr configure: error: gmp.h can't be found, or is unusable.
+#_git_commit=3240b4d6fc7faef114ba949f335d482bd7885c6c # SVN: r148025  #  7954         mpfr configure: error: gmp.h can't be found, or is unusable.
+#_git_commit=a1bda0d7e8e5f4aac6287f4f607952f056c8bedf # SVN: r148000  #  7941       Next29    mingw-tls.c: New file.
+#_git_commit=acd262252cd2121bd1bb48ed8b28cf1ac6bc7aaf # SVN: r147996  #  7939         mpc configure: error: libgmp not found or uses a different ABI.
+#_git_commit=cd9c1ca866b6aa5041a352e0ed07ae5f91e235e5 # SVN: r147995  #  7938       Next30
+#_git_commit=36bac386ae2339359ebcee2473192c4171c5c7df # SVN: r147994  #  7937         ld.exe: cannot find -lmpc
+#_git_commit=67f43f51c4097477c00e5ff5d052ff6126462ee9 # SVN: r147811  #  7828       Next28
+#_git_commit=f256c06431521e45c8bdfa52d99ee481b7bf77ce # SVN: r147755  #  7797         ld.exe: cannot find -lmpc
+#_git_commit=7d47ae1d6491907d3f6c5c870bb83dceac1551c4 # SVN: r147604  #  7716       Next31
+#_git_commit=43e450d4ead8e4e6a348e14ad498d0388fa930b9 # SVN: r147458  #  7643         mpfr configure: error: gmp.h can't be found, or is unusable.
+#_git_commit=be537af6157d39f4c514086d683335feb57c1a47 # SVN: r146792  #  7272         mpfr configure: error: gmp.h can't be found, or is unusable.
+#_git_commit=3270032c592202a31bf10b630ee825afed62a054 # SVN: r146781  #  7266       Next27
+#_git_commit=3764d512d514c5011bf6473075444d49de284e05 # SVN: r146772  #  7260         Error building shared libgcc undefined reference to `__addtf3'
+#_git_commit=a687f83c5ae302e0e1abff0af5992eeb02f510a7 # SVN: r146769  #  7259         ld.exe: cannot find -lmpc
+#_git_commit=1c62e8f226cc63488e8a1d11d9aadfbf89514f93 # SVN: r146765  #  7257         ld.exe: cannot find -lmpc
+#_git_commit=a3a5e3d16c61f3bb52e0dd0ab4b639ccd3cf9d3f # SVN: r146761  #  7254         ld.exe: cannot find -lmpc
+#_git_commit=350916301fe8afa02464e3ca84c70015ce2cf74b # SVN: r146529  #  7102         ld.exe: cannot find -lmpc   "gcc/config/i386/t-mingw-w64 added here"
+#_git_commit=0267afc48d8f1e520d850241b73d4d68a56278cf # SVN: r146526  #  7101         Error building shared libgcc undefined reference to `__addtf3'
+#_git_commit=2ba9daa701f829cd991006a9aa29b74b88831bc9 # SVN: r146525  #  7100         Error building shared libgcc undefined reference to `__addtf3'
+#_git_commit=ad8a1ac09d45ba7a3596434b4bd38d698a87c28e # SVN: r146521  #  7099         Builds and CRT1 gives Error: operand size mismatch for `bsf'
+#_git_commit=e54d52a8fb13d13b5ec27ef02617f053267d13b9 # SVN: r145124  # start 4.5.0   Builds and CRT1 gives Error: operand size mismatch for `bsf'
+#_git_branch=releases/gcc-4.4                         # SVN: r??????  # end   4.4.?
+#_git_branch=releases/gcc-4.3                         # SVN: r??????  # end   4.3.?
+#_git_branch=releases/gcc-4.2                         # SVN: r??????  # end   4.2.?
 _git_repo_url=git://github.com/stahta01/gcc4_main_development.git
 _sourcedir=${_basename}4-main-dev-git
 
@@ -120,10 +163,13 @@ source+=("ftp://gcc.gnu.org/pub/gcc/infrastructure/mpfr-${MPFR_VERSION}.tar.bz2"
         801-gcc-4.0-cfns-fix-mismatch-in-gnu_inline-attributes.patch
         802-gcc-4.0-xm-mingw32.h-__USE_MINGW_ANSI_STDIO.patch
         803-gcc-4.4-add-DWARF2_UNWIND_INFO-guard.patch
-        804-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch 
+        804-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch
         805-gcc-4.4-PR-bootstrap-56258.patch
         806-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch
-        807-gcc-4.5-Fix-texi-docs-syntax-errors.patch)
+        807-gcc-4.5-Fix-texi-docs-syntax-errors.patch
+        831-gcc-4.5.0-libssp-Add-bindir-flag.patch
+        832-Backport-part-of-PR-bootstrap-53912.patch
+        833-configure.ac-Detect-MPC-in-default-directory.patch)
 sha256sums=('SKIP'
             'c7e75a08a8d49d2082e4caee1591a05d11b9d5627514e678f02d66a124bcf2ba'
             '936162c0312886c21581002b79932829aa048cfaf9937c6265aeaa14f1cd1775'
@@ -141,7 +187,10 @@ sha256sums=('SKIP'
             '2cf58796ddc8df115b27fb9058f8368a587e446e1545f40efedd7790ba3996f0'
             '7f4b6dd96249f7bdc83f254f7f0ccf4704a89b52d63760ba9f4d5b8c4635ac04'
             '477e63bc51c75bce7cdef533f406b53eba23482bd797ad71d8ec519a5605c1b7'
-            '1e6acefcabd0899ba94cdc7ae83c3e26a5096f182fd0747ff1d02cbf3b22c77e')
+            '1e6acefcabd0899ba94cdc7ae83c3e26a5096f182fd0747ff1d02cbf3b22c77e'
+            'ab92b6c3ea40cd2fb74b6d8c94567d2b89b43ba32b0b286b8398489f1973f0c6'
+            '260871784d1e78374d2545eb6edd88c42da381fd77d8cacea1984b6a8876397d'
+            '9bdad91ac32ebfa774135af67083082fc8ab44d072472730cf020bef9a6f0869')
 
 _extract_to_gcc_folder() {
     local tarfile="$1"
@@ -168,9 +217,15 @@ pkgver() {
 prepare() {
   cd ${srcdir}
 
-  _extract_to_gcc_folder          mpfr-${MPFR_VERSION}.tar.bz2
-  _extract_to_gcc_folder          gmp-${GMP_VERSION}.tar.bz2
-  _extract_to_gcc_folder          mpc-${MPC_VERSION}.tar.gz
+  if [[ "$_enable_intree_gmp_etc" == "yes" ]]; then
+    _extract_to_gcc_folder          gmp-${GMP_VERSION}.tar.bz2
+    _extract_to_gcc_folder          mpfr-${MPFR_VERSION}.tar.bz2
+    _extract_to_gcc_folder          mpc-${MPC_VERSION}.tar.gz
+  else
+    rm -fr ${srcdir}/${_sourcedir}/mpc
+    rm -fr ${srcdir}/${_sourcedir}/mpfr
+    rm -fr ${srcdir}/${_sourcedir}/gmp
+  fi
 
   if [[ "$_enable_graphite" == "yes" ]]; then
     _extract_to_gcc_folder       isl-${ISL_VERSION}.tar.bz2
@@ -186,6 +241,40 @@ prepare() {
   _git_base_commit=$(git rev-parse HEAD)
   _gcc_version=$(head -n 34 gcc/BASE-VER | sed -e 's/.* //' | tr -d '"\n')
   _gcc_date=$(head -n 34 gcc/DATESTAMP | sed -e 's/.* //' | tr -d '"\n')
+
+  echo "CARCH := ${CARCH}"
+  echo "_gcc_version := ${_gcc_version}"
+  echo "_gcc_date := ${_gcc_date}"
+
+  GIT_AM="git am --committer-date-is-author-date"
+
+  # Don't waste valuable commandline chars on double-quotes around "arguments"
+  #  that don't need them.
+  ${GIT_AM} ${srcdir}/130-gcc-4.3-dont-escape-arguments-that-dont-need-it-in-pex-win32.c.patch
+
+  # Make Windows behave the same as Posix in the consideration of whether folder
+  # "/exists/doesnt-exist/.." is a valid path.. in Posix, it isn't.
+  ${GIT_AM} ${srcdir}/140-gcc-4.0-fix-for-windows-not-minding-non-existant-parent-dirs.patch
+
+  # Don't make a lowercase backslashed path from argv[0]
+  #  that then fail to strcmp with prefix(es) .. they're also ugly.
+  ${GIT_AM} --whitespace=fix ${srcdir}/150-gcc-4.0-windows-lrealpath-no-force-lowercase-nor-backslash.patch
+
+  # Kai's libgomp fix.
+  ${GIT_AM} ${srcdir}/210-gcc-4.4-ktietz-libgomp.patch || $( true; git am --abort)
+
+  # https://patchwork.ozlabs.org/patch/504982/
+  ${GIT_AM} ${srcdir}/801-gcc-4.0-cfns-fix-mismatch-in-gnu_inline-attributes.patch
+
+  ${GIT_AM} ${srcdir}/802-gcc-4.0-xm-mingw32.h-__USE_MINGW_ANSI_STDIO.patch
+  ${GIT_AM} ${srcdir}/803-gcc-4.4-add-DWARF2_UNWIND_INFO-guard.patch || $( true; git am --abort)
+  ${GIT_AM} --whitespace=fix ${srcdir}/804-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
+  ${GIT_AM} ${srcdir}/805-gcc-4.4-PR-bootstrap-56258.patch
+  ${GIT_AM} ${srcdir}/806-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
+  ${GIT_AM} ${srcdir}/807-gcc-4.5-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
+  ${GIT_AM} ${srcdir}/831-gcc-4.5.0-libssp-Add-bindir-flag.patch || $( true; git am --abort)
+  ${GIT_AM} ${srcdir}/832-Backport-part-of-PR-bootstrap-53912.patch || $( true; git am --abort)
+  ${GIT_AM} ${srcdir}/833-configure.ac-Detect-MPC-in-default-directory.patch || $( true; git am --abort)
 
   #do not install libiberty
   sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
@@ -210,39 +299,14 @@ prepare() {
   } || {
     cp gcc/config/i386/mingw32.h gcc/config/i386/mingw32.h.src
   }
-  local MINGW_NATIVE_PREFIX=$(cygpath -am ${_install_prefix}/${MINGW_CHOST})
-  sed -i "s/\\/mingw\\//${MINGW_NATIVE_PREFIX//\//\\/}\\//g" gcc/config/i386/mingw32.h
+  local MINGW_CRT_NATIVE_PREFIX=$(cygpath -am ${_install_prefix}/${MINGW_CHOST})
+  sed -i "s/\\/mingw\\//${MINGW_CRT_NATIVE_PREFIX//\//\\/}\\//g" gcc/config/i386/mingw32.h
 
   # FIX "The directory that should contain system headers does not exist: /mingw/include"
   sed -i "s|/mingw/include|/mingw32/include|g" gcc/config/i386/t-mingw32
-  sed -i "s|/mingw/include|/mingw64/include|g" gcc/config/i386/t-mingw-w64
-
-  GIT_AM="git am --committer-date-is-author-date"
-
-  # Don't waste valuable commandline chars on double-quotes around "arguments"
-  #  that don't need them.
-  ${GIT_AM} ${srcdir}/130-gcc-4.3-dont-escape-arguments-that-dont-need-it-in-pex-win32.c.patch
-
-  # Make Windows behave the same as Posix in the consideration of whether folder
-  # "/exists/doesnt-exist/.." is a valid path.. in Posix, it isn't.
-  ${GIT_AM} ${srcdir}/140-gcc-4.0-fix-for-windows-not-minding-non-existant-parent-dirs.patch
-
-  # Don't make a lowercase backslashed path from argv[0]
-  #  that then fail to strcmp with prefix(es) .. they're also ugly.
-  ${GIT_AM} --whitespace=fix ${srcdir}/150-gcc-4.0-windows-lrealpath-no-force-lowercase-nor-backslash.patch
-
-  # Kai's libgomp fix.
-  ${GIT_AM} ${srcdir}/210-gcc-4.4-ktietz-libgomp.patch
-
-  # https://patchwork.ozlabs.org/patch/504982/
-  ${GIT_AM} ${srcdir}/801-gcc-4.0-cfns-fix-mismatch-in-gnu_inline-attributes.patch
-
-  ${GIT_AM} ${srcdir}/802-gcc-4.0-xm-mingw32.h-__USE_MINGW_ANSI_STDIO.patch
-  ${GIT_AM} ${srcdir}/803-gcc-4.4-add-DWARF2_UNWIND_INFO-guard.patch || $( true; git am --abort)
-  ${GIT_AM} --whitespace=fix ${srcdir}/804-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
-  ${GIT_AM} ${srcdir}/805-gcc-4.4-PR-bootstrap-56258.patch
-  ${GIT_AM} ${srcdir}/806-gcc-4.5.0-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
-  ${GIT_AM} ${srcdir}/807-gcc-4.5-Fix-texi-docs-syntax-errors.patch || $( true; git am --abort)
+  if [[ -f gcc/config/i386/t-mingw-w64 ]]; then
+    sed -i "s|/mingw/include|/mingw64/include|g" gcc/config/i386/t-mingw-w64
+  fi
 }
 
 build() {
@@ -256,12 +320,7 @@ build() {
   LDFLAGS=${LDFLAGS/,--nxcompat}
   LDFLAGS=${LDFLAGS/,--high-entropy-va}
 
-  LDFLAGS+=" -Wl,--disable-runtime-pseudo-reloc" # maybe try this linker option
-
   echo "LDFLAGS := $LDFLAGS"
-
-  CFLAGS+=" -fno-stack-check -fno-stack-protector -mno-stack-arg-probe"
-
   echo "CFLAGS := $CFLAGS"
 
   local _gcc_driver_version=`eval "cat ${srcdir}/${_sourcedir}/gcc/BASE-VER"`
@@ -314,6 +373,10 @@ build() {
     configure_opts+=("--disable-libgomp")
   fi
 
+  if [[ "$_enable_shared" == "yes" ]]; then
+    configure_opts+=("--enable-shared")
+  fi
+
   local _languages="c"
   if [ "$_enable_ada" == "yes" ]; then
     _languages+=",ada"
@@ -338,10 +401,18 @@ build() {
 
   pacman -Q ${OPT_PACKAGE_MINGW_PREFIX}-crt
   gcc --version
+  gcc -dumpversion
   ld  --version
   if [ "$_enable_ada" == "yes" ]; then
     gnatbind  --version
   fi
+
+#    --with-gmp-include="${_install_prefix}/include" \
+#    --with-mpfr-include="${_install_prefix}/include" \
+#    --with-mpc-include="${_install_prefix}/include" \
+#    --with-gmp-lib="${_install_prefix}/lib" \
+#    --with-mpfr-lib="${_install_prefix}/lib" \
+#    --with-mpc-lib="${_install_prefix}/lib" \
 
   ../${_sourcedir}/configure \
     --with-build-time-tools=${_install_prefix}/bin \
@@ -358,7 +429,7 @@ build() {
     --with-arch=${_arch} \
     --with-tune=generic \
     --enable-languages=${_languages} \
-    --enable-shared --enable-static \
+    --enable-static \
     --enable-libatomic \
     --enable-fully-dynamic-string \
     --enable-libstdcxx-time=yes \
@@ -394,6 +465,9 @@ package_opt-mingw-gcc-libs() {
   if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
     depends+=("${OPT_PACKAGE_MINGW_PREFIX}-libwinpthread")
   fi
+  if [[ "$_enable_intree_gmp_etc" != "yes" ]]; then
+    depends+=("${OPT_PACKAGE_MINGW_PREFIX}-gmp")
+  fi
   provides=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-libs" "${OPT_PACKAGE_MINGW_PREFIX}-libssp")
   conflicts=("${OPT_PACKAGE_MINGW_PREFIX}-${_basename}-libs")
 
@@ -418,8 +492,10 @@ package_opt-mingw-gcc() {
     "${OPT_PACKAGE_MINGW_PREFIX}-zlib"
     "${OPT_PACKAGE_MINGW_PREFIX}-crt"
     "${OPT_PACKAGE_MINGW_PREFIX}-headers"
-    "${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs=${pkgver}-${pkgrel}"
   )
+  if [[ "$_enable_shared" == "yes" ]]; then
+    depends+=("${OPT_PACKAGE_MINGW_PREFIX}-${_realname}-libs=${pkgver}-${pkgrel}")
+  fi
   if [[ "$_enable_threads" == "yes" && "$_threads" == "posix" ]]; then
     depends+=("${OPT_PACKAGE_MINGW_PREFIX}-winpthreads")
   fi
@@ -432,7 +508,7 @@ package_opt-mingw-gcc() {
     i686)
       local _lib_folders=lib32
     ;;
- 
+
     x86_64)
       local _lib_folders=lib64
     ;;
@@ -469,7 +545,12 @@ package_opt-mingw-gcc() {
   cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/libssp*               ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
 #  cp lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/lto*.exe              ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
 
-  cp ${srcdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_lib_folders}/libgcc_s.a ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  if [[ -f ${srcdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_lib_folders}/libgcc_s.a ]]; then
+    cp ${srcdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_lib_folders}/libgcc_s.a ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  fi
+  if [[ -f ${srcdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/libgcc_s.a ]]; then
+    cp ${srcdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/libgcc_s.a ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/
+  fi
 
   if [ "$_enable_cxx" == "yes" ]; then
     cp -r include/c++ ${pkgdir}${_install_prefix}/include/
@@ -484,24 +565,30 @@ package_opt-mingw-gcc() {
   fi
 
   mkdir -p ${pkgdir}${_install_prefix}/share/{doc,info,locale,man}
-  cp share/info/cpp.info*                                   ${pkgdir}${_install_prefix}/share/info/
-  cp share/info/cppinternals.info*                          ${pkgdir}${_install_prefix}/share/info/
-  cp share/info/gcc.info*                                   ${pkgdir}${_install_prefix}/share/info/
-  cp share/info/gccinstall.info*                            ${pkgdir}${_install_prefix}/share/info/
-  cp share/info/gccint.info*                                ${pkgdir}${_install_prefix}/share/info/
+  if [[ -d ${srcdir}${_install_prefix}/share/info ]]; then
+    cd ${srcdir}${_install_prefix}/share
+  fi
+  cp info/cpp.info*                                                   ${pkgdir}${_install_prefix}/share/info/
+  cp info/cppinternals.info*                                          ${pkgdir}${_install_prefix}/share/info/
+  cp info/gcc.info*                                                   ${pkgdir}${_install_prefix}/share/info/
+  cp info/gccinstall.info*                                            ${pkgdir}${_install_prefix}/share/info/
+  cp info/gccint.info*                                                ${pkgdir}${_install_prefix}/share/info/
   if [ "$_enable_libgomp" == "yes" ]; then
-    cp share/info/libgomp.info*                             ${pkgdir}${_install_prefix}/share/info/
+    cp info/libgomp.info*                                             ${pkgdir}${_install_prefix}/share/info/
   fi
 
   mkdir -p ${pkgdir}${_install_prefix}/share/man/man1
-  cp share/man/man1/cpp.1*                                  ${pkgdir}${_install_prefix}/share/man/man1/
-  cp share/man/man1/gcc.1*                                  ${pkgdir}${_install_prefix}/share/man/man1/
-  cp share/man/man1/gcov.1*                                 ${pkgdir}${_install_prefix}/share/man/man1/
-  cp share/man/man7/fsf-funding.7*                          ${pkgdir}${_install_prefix}/share/man/man1/
-  cp share/man/man7/gfdl.7*                                 ${pkgdir}${_install_prefix}/share/man/man1/
-  cp share/man/man7/gpl.7*                                  ${pkgdir}${_install_prefix}/share/man/man1/
+  if [[ -d ${srcdir}${_install_prefix}/share/man ]]; then
+    cd ${srcdir}${_install_prefix}/share
+  fi
+  cp man/man1/cpp.1*                                                  ${pkgdir}${_install_prefix}/share/man/man1/
+  cp man/man1/gcc.1*                                                  ${pkgdir}${_install_prefix}/share/man/man1/
+  cp man/man1/gcov.1*                                                 ${pkgdir}${_install_prefix}/share/man/man1/
+  cp man/man7/fsf-funding.7*                                          ${pkgdir}${_install_prefix}/share/man/man1/
+  cp man/man7/gfdl.7*                                                 ${pkgdir}${_install_prefix}/share/man/man1/
+  cp man/man7/gpl.7*                                                  ${pkgdir}${_install_prefix}/share/man/man1/
   if [ "$_enable_cxx" == "yes" ]; then
-    cp share/man/man1/g++.1*                                ${pkgdir}${_install_prefix}/share/man/man1/
+    cp man/man1/g++.1*                                                ${pkgdir}${_install_prefix}/share/man/man1/
   fi
 }
 
@@ -516,7 +603,9 @@ package_opt-mingw-gcc-ada() {
   cd ${srcdir}${_install_prefix}
   cp bin/gnat*.exe ${pkgdir}${_install_prefix}/bin/
 
-  cp bin/{libgnarl*,libgnat*}.dll ${pkgdir}${_install_prefix}/bin/
+  if [[ "$_enable_shared" == "yes" ]]; then
+    cp bin/{libgnarl*,libgnat*}.dll ${pkgdir}${_install_prefix}/bin/
+  fi
 
   mkdir -p ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}
   cp -r lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/adainclude         ${pkgdir}${_install_prefix}/lib/gcc/${MINGW_CHOST}/${_gcc_driver_version}/

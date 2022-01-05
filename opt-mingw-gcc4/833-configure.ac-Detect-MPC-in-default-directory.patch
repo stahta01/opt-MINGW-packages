@@ -1,0 +1,64 @@
+From 5f4a82c0c51befe5a6a4eae3e371cdeec85a7dd6 Mon Sep 17 00:00:00 2001
+From: "Kaveh R. Ghazi" <ghazi@caip.rutgers.edu>
+Date: Mon, 8 Jun 2009 16:30:30 +0000
+Subject: SVN 148280 Detect MPC
+
+Patch edited by Tim S.
+
+	* configure.ac: Detect MPC in default directory.
+	* configure: Regenerate.
+---
+ configure    | 7 ++++++-
+ configure.ac | 7 ++++++-
+
+diff --git a/configure b/configure
+index 867bef97c46..a7c6b249701 100755
+--- a/configure
++++ b/configure
+@@ -4508,7 +4508,7 @@ do_compare="$gcc_cv_prog_cmp_skip"
+ gmplibs="-lmpfr -lgmp"
+ gmpinc=
+ have_gmp=no
+-mpclibs=
++mpclibs=-lmpc
+ mpcinc=
+ have_mpc=no
+ 
+@@ -5049,6 +5049,11 @@ They may be located in separate packages." >&2;}
+   fi
+ fi
+ 
++if test x$have_mpc != xyes ; then
++  mpcinc=
++  mpclibs=
++fi
++
+ gmpinc="$mpcinc $gmpinc"
+ gmplibs="$mpclibs $gmplibs"
+ 
+diff --git a/configure.ac b/configure.ac
+index bedf0c6a5bc..8662f9dfb4b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1195,7 +1195,7 @@ ACX_PROG_CMP_IGNORE_INITIAL
+ gmplibs="-lmpfr -lgmp"
+ gmpinc=
+ have_gmp=no
+-mpclibs=
++mpclibs=-lmpc
+ mpcinc=
+ have_mpc=no
+ 
+@@ -1397,6 +1397,11 @@ They may be located in separate packages.])
+   fi
+ fi
+ 
++if test x$have_mpc != xyes ; then
++  mpcinc=
++  mpclibs=
++fi
++
+ gmpinc="$mpcinc $gmpinc"
+ gmplibs="$mpclibs $gmplibs"
+ 
+-- 
