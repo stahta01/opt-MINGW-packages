@@ -13,11 +13,11 @@
 [      54437]  ./opt/mingw32/bin/bzip2recover.exe
 [       1297]  ./opt/mingw32/bin/bzless
 [       1297]  ./opt/mingw32/bin/bzmore
-[     105116]  ./opt/mingw32/bin/libbz2-1.dll
+[     107197]  ./opt/mingw32/bin/libbz2-1.dll
 [          0]  ./opt/mingw32/include
 [       7187]  ./opt/mingw32/include/bzlib.h
 [          0]  ./opt/mingw32/lib
-[      68958]  ./opt/mingw32/lib/libbz2.a
+[      70376]  ./opt/mingw32/lib/libbz2.a
 [      23040]  ./opt/mingw32/lib/libbz2.dll.a
 [          0]  ./opt/mingw32/lib/pkgconfig
 [        253]  ./opt/mingw32/lib/pkgconfig/bzip2.pc

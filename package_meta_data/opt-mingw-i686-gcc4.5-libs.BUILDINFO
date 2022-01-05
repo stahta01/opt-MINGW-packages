@@ -1,11 +1,11 @@
 format = 2
 pkgname = opt-mingw-i686-gcc4.5-libs
 pkgbase = opt-mingw-gcc4.5
-pkgver = 4.5.4-3
+pkgver = 4.5.4-4
 pkgarch = any
-pkgbuild_sha256sum = 14843a35124c1f763634b8a94673a17b624f5ddff51c1d04237f8446bbc446b8
+pkgbuild_sha256sum = 0f91476a77e4a5aca9ed1d7c81eb35246af719b21d7042f7bd61dc0e7eae571e
 packager = Unknown Packager
-builddate = 1639890577
+builddate = 1639937405
 builddir = /c/Users/stahta01/devel/PKGBUILDs/opt-MINGW-packages/opt-mingw-gcc4.5
 startdir = /c/Users/stahta01/devel/PKGBUILDs/opt-MINGW-packages/opt-mingw-gcc4.5
 buildtool = makepkg
